@@ -1,0 +1,342 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>18.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{9aba6713-eeb9-456f-94cc-5025676bac67}</ProjectGuid>
+    <RootNamespace>StealthGame</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>StealthGame</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v145</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\directxtk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\directxtk\lib\x64\Debug;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>C:\directxtk\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\directxtk\lib\x64\Release;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Application.h" />
+    <ClInclude Include="src\fpscontrol.h" />
+    <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\gameobject\gameobject.h" />
+    <ClInclude Include="src\game\GameScene.h" />
+    <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\system\AimOrientation.h" />
+    <ClInclude Include="src\system\BoxDrawer.h" />
+    <ClInclude Include="src\system\C3DShape.h" />
+    <ClInclude Include="src\system\camera.h" />
+    <ClInclude Include="src\system\CapsuleDrawer.h" />
+    <ClInclude Include="src\system\CBoxMesh.h" />
+    <ClInclude Include="src\system\CConeMesh.h" />
+    <ClInclude Include="src\system\CCylinderMesh.h" />
+    <ClInclude Include="src\system\CDirectInput.h" />
+    <ClInclude Include="src\system\CEnvironmentCube.h" />
+    <ClInclude Include="src\system\CGmdlMesh.h" />
+    <ClInclude Include="src\system\CGmdlMeshRenderer.h" />
+    <ClInclude Include="src\system\CGmdlSkeleton.h" />
+    <ClInclude Include="src\system\CIndexBuffer.h" />
+    <ClInclude Include="src\system\CLineMesh.h" />
+    <ClInclude Include="src\system\CMaterial.h" />
+    <ClInclude Include="src\system\CMesh.h" />
+    <ClInclude Include="src\system\CMeshRenderer.h" />
+    <ClInclude Include="src\system\collision.h" />
+    <ClInclude Include="src\system\commontypes.h" />
+    <ClInclude Include="src\system\ConeDrawer.h" />
+    <ClInclude Include="src\system\CPbrMaterial.h" />
+    <ClInclude Include="src\system\CPlane.h" />
+    <ClInclude Include="src\system\CPlaneMesh.h" />
+    <ClInclude Include="src\system\CPolar3D.h" />
+    <ClInclude Include="src\system\CShader.h" />
+    <ClInclude Include="src\system\CSphereMesh.h" />
+    <ClInclude Include="src\system\CSprite.h" />
+    <ClInclude Include="src\system\CTexture.h" />
+    <ClInclude Include="src\system\CVertexBuffer.h" />
+    <ClInclude Include="src\system\CylinderDrawer.h" />
+    <ClInclude Include="src\system\DebugUI.h" />
+    <ClInclude Include="src\system\DirectWrite.h" />
+    <ClInclude Include="src\system\dx11helper.h" />
+    <ClInclude Include="src\system\gmdl\ModelBinary.h" />
+    <ClInclude Include="src\system\gmdl\ModelFormat.h" />
+    <ClInclude Include="src\system\imgui\imconfig.h" />
+    <ClInclude Include="src\system\imgui\imgui.h" />
+    <ClInclude Include="src\system\imgui\imgui_impl_dx11.h" />
+    <ClInclude Include="src\system\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="src\system\imgui\imgui_internal.h" />
+    <ClInclude Include="src\system\imgui\imstb_rectpack.h" />
+    <ClInclude Include="src\system\imgui\imstb_textedit.h" />
+    <ClInclude Include="src\system\imgui\imstb_truetype.h" />
+    <ClInclude Include="src\system\Inputmanager.h" />
+    <ClInclude Include="src\system\IScene.h" />
+    <ClInclude Include="src\system\LineDrawer.h" />
+    <ClInclude Include="src\system\meshmanager.h" />
+    <ClInclude Include="src\system\noncopyable.h" />
+    <ClInclude Include="src\system\PlaneDrawer.h" />
+    <ClInclude Include="src\system\RandomEngine.h" />
+    <ClInclude Include="src\system\renderer.h" />
+    <ClInclude Include="src\system\SceneClassFactory.h" />
+    <ClInclude Include="src\system\scenemanager.h" />
+    <ClInclude Include="src\system\SphereDrawer.h" />
+    <ClInclude Include="src\system\stb_image.h" />
+    <ClInclude Include="src\system\stb_perlin.h" />
+    <ClInclude Include="src\system\transform.h" />
+    <ClInclude Include="src\system\TriangleDrawer.h" />
+    <ClInclude Include="src\system\utility.h" />
+    <ClInclude Include="src\utility\animationsystem.h" />
+    <ClInclude Include="src\utility\circle.h" />
+    <ClInclude Include="src\utility\stopwatch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Application.cpp" />
+    <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\game\GameScene.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\system\BoxDrawer.cpp" />
+    <ClCompile Include="src\system\C3DShape.cpp" />
+    <ClCompile Include="src\system\camera.cpp" />
+    <ClCompile Include="src\system\CapsuleDrawer.cpp" />
+    <ClCompile Include="src\system\CConeMesh.cpp" />
+    <ClCompile Include="src\system\CCylinderMesh.cpp" />
+    <ClCompile Include="src\system\CEnvironmentCube.cpp" />
+    <ClCompile Include="src\system\CGmdlMesh.cpp">
+      <!-- UTF-8 ソースの日本語文字列（エラーメッセージ）を UTF-8 のまま埋め込む。ImGui 表示の文字化け対策 -->
+      <AdditionalOptions>/execution-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="src\system\CGmdlMeshRenderer.cpp" />
+    <ClCompile Include="src\system\CGmdlSkeleton.cpp" />
+    <ClCompile Include="src\system\CLineMesh.cpp" />
+    <ClCompile Include="src\system\collision.cpp" />
+    <ClCompile Include="src\system\ConeDrawer.cpp" />
+    <ClCompile Include="src\system\CPbrMaterial.cpp" />
+    <ClCompile Include="src\system\CPlane.cpp" />
+    <ClCompile Include="src\system\CPlaneMesh.cpp" />
+    <ClCompile Include="src\system\CShader.cpp" />
+    <ClCompile Include="src\system\CSprite.cpp" />
+    <ClCompile Include="src\system\CTexture.cpp" />
+    <ClCompile Include="src\system\CylinderDrawer.cpp" />
+    <ClCompile Include="src\system\DebugUI.cpp" />
+    <ClCompile Include="src\system\DirectWrite.cpp" />
+    <ClCompile Include="src\system\dx11helper.cpp" />
+    <ClCompile Include="src\system\gmdl\ModelBinary.cpp">
+      <!-- UTF-8 ソースの日本語文字列（エラーメッセージ）を UTF-8 のまま埋め込む。ImGui 表示の文字化け対策 -->
+      <AdditionalOptions>/execution-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="src\system\gmdl\ModelFormat.cpp">
+      <!-- UTF-8 ソースの日本語文字列（エラーメッセージ）を UTF-8 のまま埋め込む。ImGui 表示の文字化け対策 -->
+      <AdditionalOptions>/execution-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ClCompile Include="src\system\imgui\imgui.cpp" />
+    <ClCompile Include="src\system\imgui\imgui_demo.cpp" />
+    <ClCompile Include="src\system\imgui\imgui_draw.cpp" />
+    <ClCompile Include="src\system\imgui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="src\system\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\system\imgui\imgui_tables.cpp" />
+    <ClCompile Include="src\system\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\system\LineDrawer.cpp" />
+    <ClCompile Include="src\system\meshmanager.cpp" />
+    <ClCompile Include="src\system\PlaneDrawer.cpp" />
+    <ClCompile Include="src\system\renderer.cpp" />
+    <ClCompile Include="src\system\scenemanager.cpp" />
+    <ClCompile Include="src\system\SphereDrawer.cpp" />
+    <ClCompile Include="src\system\stb.cpp">
+      <!-- stb_image の画像デコードは最適化なしだと数倍遅いので、Debug でもこのファイルだけ /O2 でビルドする。
+           /O2 は /RTC・/ZI と併用できないため、ランタイムチェックとデバッグ情報形式もこのファイルだけ変更する。 -->
+      <Optimization Condition="'$(Configuration)'=='Debug'">MaxSpeed</Optimization>
+      <BasicRuntimeChecks Condition="'$(Configuration)'=='Debug'">Default</BasicRuntimeChecks>
+      <DebugInformationFormat Condition="'$(Configuration)'=='Debug'">ProgramDatabase</DebugInformationFormat>
+      <IntrinsicFunctions Condition="'$(Configuration)'=='Debug'">true</IntrinsicFunctions>
+      <InlineFunctionExpansion Condition="'$(Configuration)'=='Debug'">AnySuitable</InlineFunctionExpansion>
+    </ClCompile>
+    <ClCompile Include="src\system\stbperlin.cpp" />
+    <ClCompile Include="src\system\TriangleDrawer.cpp" />
+    <ClCompile Include="src\system\utility.cpp" />
+    <ClCompile Include="src\utility\animationsystem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\common.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\env_bindings.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\GeometryShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\pbrOneSkinVS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\pbrPS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\pbrVS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\pbr_brdf.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\pbr_common.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\pbr_io.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\shadow_bindings.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\unlitTexturePS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\unlitTextureVS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\vertexLightingOneSkinVS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\vertexLightingPS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shader\vertexLightingVS.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

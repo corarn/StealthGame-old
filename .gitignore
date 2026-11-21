@@ -1,0 +1,10 @@
+# ビルドすると毎回作り直されるもの
+x64/
+.vs/
+*.user
+
+# DebugUI(ImGui) が実行のたびに書き換える一時ファイル
+imgui.ini
+
+# devlog・企画シートは自分用のメモなので git に入れない（Obsidian に反映して残す）
+docs/
