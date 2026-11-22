@@ -27,6 +27,9 @@ void GameScene::Init()
 		std::cout << "GameScene: CEnvironmentCube の定数バッファを作れなかった" << std::endl;
 	}
 
+	m_lightingPanel = std::make_unique<LightingDebugPanel>(m_environment.get());
+	m_lightingPanel->RegisterToDebugUI();
+
 	AddGameObject<Stage>(/* layer = */ 0);
 
 	// Segment を描く前に1回呼ぶ（線用のシェーダーをここで読み込む）

@@ -8,6 +8,7 @@
 #include "../../system/C3DShape.h"
 #include "../../gameobject/GameObject.h"
 #include "../debug/FreeCameraDebugPanel.h"
+#include "../debug/LightingDebugPanel.h"
 #include "../../system/CEnvironmentCube.h"
 
 class GameScene : public SceneBase
@@ -40,6 +41,9 @@ private:
 	// PBR のシェーダに、カメラの位置と露出を送る係。露出は画面全体の明るさなので、物ではなくシーンが持つ
 	// コピーできないクラスなので、ほかのメンバと同じく unique_ptr で持って Init() で作る
 	std::unique_ptr<CEnvironmentCube> m_environment = nullptr;
+
+	// 画面に光と露出のデバッグ表示
+	std::unique_ptr<LightingDebugPanel> m_lightingPanel = nullptr;
 
 public:
 	void Update(uint64_t deltaTimeMicrosec) override;
