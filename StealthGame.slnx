@@ -1,6 +1,6 @@
-﻿<Solution>
+<Solution>
   <Configurations>
     <Platform Name="x64" />
   </Configurations>
-  <Project Path="StealthGame.vcxproj" />
+  <Project Path="StealthGame.vcxproj" Id="9aba6713-eeb9-456f-94cc-5025676bac67" />
 </Solution>
