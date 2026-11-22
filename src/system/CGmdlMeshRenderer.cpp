@@ -64,6 +64,11 @@ void CGmdlMeshRenderer::Init(CGmdlMesh& mesh)
 							&& i < m_normalTextures.size()
 							&& m_normalTextures[i] != nullptr;
 
+		// 発光テクスチャも「実際に読めた」ときだけ掛ける。読めていない材質で掛けると、
+		// 前に描いた材質の発光テクスチャが t5 に残っていて、それを掛けてしまう。
+		params.useEmissiveTexture = i < m_emissiveTextures.size()
+								  && m_emissiveTextures[i] != nullptr;
+
 		pbr->SetParams(params);
 		m_pbrMaterials.emplace_back(std::move(pbr));
 	}

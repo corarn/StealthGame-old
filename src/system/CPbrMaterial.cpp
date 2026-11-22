@@ -5,14 +5,15 @@
 namespace {
 
 	/// b8 の実レイアウト。shader/env_bindings.hlsl の PbrMaterialBuffer と
-	/// 並び・パッキングを完全に一致させること（16 バイト境界 x 3 行 = 48 バイト）。
+	/// 並び・パッキングを完全に一致させること（16 バイト境界 x 4 行 = 64 バイト）。
 	struct CBPbrMaterial {
 		DirectX::XMFLOAT3 Albedo;        float Metallic;          // 1 行目
 		float Roughness; float AO;
 		int   UseAlbedoTexture;          int   UseMaterialColor;  // 2 行目
 		DirectX::XMFLOAT3 F0;            int   F0Mode;            // 3 行目
+		int   UseEmissiveTexture;        DirectX::XMFLOAT3 Padding;  // 4 行目
 	};
-	static_assert(sizeof(CBPbrMaterial) == 48, "b8 のレイアウトが env_bindings.hlsl とずれています");
+	static_assert(sizeof(CBPbrMaterial) == 64, "b8 のレイアウトが env_bindings.hlsl とずれています");
 
 	constexpr UINT kPbrMaterialSlot = 8;   // register(b8)
 
@@ -57,6 +58,7 @@ void CPbrMaterial::Bind() const
 		cb.UseMaterialColor = m_params.useMaterialColor ? 1 : 0;
 		cb.F0               = m_params.f0;
 		cb.F0Mode           = m_params.f0Manual ? 1 : 0;
+		cb.UseEmissiveTexture = m_params.useEmissiveTexture ? 1 : 0;
 
 		devcontext->UpdateSubresource(m_buffer.Get(), 0, nullptr, &cb, 0, 0);
 		m_dirty = false;

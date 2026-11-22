@@ -35,6 +35,7 @@ public:
 
         bool  useAlbedoTexture = true;   ///< .gmdl のディフューズテクスチャを掛けるか
         bool  useMaterialColor = true;   ///< .gmdl の Material.Diffuse / 頂点カラーを掛けるか
+        bool  useEmissiveTexture = false; ///< 発光テクスチャ（t5）を掛けるか。テクスチャが読めた材質だけ true
     };
 
     CPbrMaterial() = default;

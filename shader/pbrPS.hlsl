@@ -23,6 +23,7 @@
 #include "pbr_brdf.hlsl"
 
 Texture2D    g_Texture      : register(t0);
+Texture2D    g_EmissiveTexture : register(t5);
 SamplerState g_SamplerState : register(s0);
 
 // アルベドテクスチャを sRGB データとして扱うかどうか。
@@ -108,7 +109,20 @@ float4 main(PBR_PS_IN In) : SV_Target
     // 拡散の環境光は Light.Ambient で一定。金属は拡散を持たないので消す。
     const float3 ambient = albedo * Light.Ambient.rgb * ao * (1.0f - metallic);
 
-    float3 color = direct + ambient + Material.Emission.rgb;
+    // 発光は「発光の色 × 発光テクスチャ」（glTF と同じ）。テクスチャのない材質（ランプ）は色だけで光る。
+    float3 emission = Material.Emission.rgb;
+    if (PbrUseEmissiveTexture != 0)
+    {
+        const float3 emissiveTex = g_EmissiveTexture.Sample(g_SamplerState, In.TexCoord).rgb;
+        // 発光テクスチャも色なので、アルベドと同じ決まりでリニアに戻す
+#if ALBEDO_TEXTURE_IS_SRGB_DATA
+        emission *= SRGBToLinear(emissiveTex);
+#else
+        emission *= emissiveTex;
+#endif
+    }
+
+    float3 color = direct + ambient + emission;
 
     // --- 表示用に変換（露出 → トーンマップ → sRGB。このパスの中だけで完結）------
     return float4(ToDisplay(color, Exposure), base.a);

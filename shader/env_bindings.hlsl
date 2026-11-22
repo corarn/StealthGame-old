@@ -42,6 +42,9 @@ cbuffer PbrMaterialBuffer : register(b8)
 
     float3 PbrF0;                  // フレネル値。PbrF0Mode = 1 のときだけ使う
     int    PbrF0Mode;              // 0 = Auto（metallic から自動）, 1 = Manual（手入力）
+
+    int    PbrUseEmissiveTexture;  // 発光テクスチャ（t5）を掛けるか
+    float3 PbrPadding;             // 1 行を 16 バイトにそろえるための詰め物
 };
 
 #endif // ENV_BINDINGS_HLSL
