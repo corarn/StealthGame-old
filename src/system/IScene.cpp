@@ -1,11 +1,11 @@
 ﻿#include "IScene.h"
-#include "../gameobject/gameobject.h"
+#include "../gameobject/GameObject.h"
 
 void SceneBase::UpdateGameObjects(uint64_t deltaTimeMicrosec)
 {
 	for (uint32_t layer = 0; layer < LAYERMAX; ++layer)
 	{
-		for (std::unique_ptr<gameobject>& object : m_gameobjects[layer])
+		for (std::unique_ptr<GameObject>& object : m_gameobjects[layer])
 		{
 			if (object && !object->isDestroyed())
 			{
@@ -16,7 +16,7 @@ void SceneBase::UpdateGameObjects(uint64_t deltaTimeMicrosec)
 
 	for (uint32_t layer = 0; layer < LAYERMAX; ++layer)
 	{
-		std::erase_if(m_gameobjects[layer], [](const std::unique_ptr<gameobject>& object)
+		std::erase_if(m_gameobjects[layer], [](const std::unique_ptr<GameObject>& object)
 			{
 				return object == nullptr || object->isDestroyed();
 			});
@@ -24,7 +24,7 @@ void SceneBase::UpdateGameObjects(uint64_t deltaTimeMicrosec)
 
 	for (uint32_t layer = 0; layer < LAYERMAX; ++layer)
 	{
-		for (std::unique_ptr<gameobject>& object : m_pendingAddObjects[layer])
+		for (std::unique_ptr<GameObject>& object : m_pendingAddObjects[layer])
 		{
 			m_gameobjects[layer].push_back(std::move(object));
 		}
@@ -36,7 +36,7 @@ void SceneBase::DrawGameObjects(uint64_t deltaTimeMicrosec)
 {
 	for (uint32_t layer = 0; layer < LAYERMAX; ++layer)
 	{
-		for (std::unique_ptr<gameobject>& object : m_gameobjects[layer])
+		for (std::unique_ptr<GameObject>& object : m_gameobjects[layer])
 		{
 			if (object && !object->isDestroyed())
 			{

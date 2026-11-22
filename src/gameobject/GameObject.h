@@ -5,14 +5,14 @@
 #include	"../system/transform.h"
 #include	"../system/IScene.h"
 
-class gameobject {
+class GameObject {
 public:
-	gameobject() = delete;
+	GameObject() = delete;
 	// š ‚±‚±‚ÅŠî’êƒNƒ‰ƒX‚Ìƒƒ“ƒo‚ğ‰Šú‰»‚·‚é
-	explicit gameobject(SceneBase* currentscene)
+	explicit GameObject(SceneBase* currentscene)
 		: m_ownerscene(currentscene){}
 
-	virtual ~gameobject() = default;
+	virtual ~GameObject() = default;
 	virtual void Update(uint64_t delta) = 0;
 	virtual void Draw(uint64_t delta) = 0;
 	virtual void Init() = 0;

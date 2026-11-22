@@ -6,7 +6,7 @@
 #include "../../system/IScene.h"
 #include "../../system/SceneClassFactory.h"
 #include "../../system/C3DShape.h"
-#include "../../gameobject/gameobject.h"
+#include "../../gameobject/GameObject.h"
 #include "../debug/FreeCameraDebugPanel.h"
 
 class GameScene : public SceneBase

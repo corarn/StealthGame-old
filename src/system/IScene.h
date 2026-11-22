@@ -9,7 +9,7 @@
 #include "camera.h"
 
 // 前方宣言
-class gameobject;
+class GameObject;
 
 // シーンインタフェース
 class IScene {
@@ -27,7 +27,7 @@ public:
 	static constexpr uint32_t LAYERMAX = 4;
 
 protected:
-	using ObjectList = std::vector<std::unique_ptr<gameobject>>;
+	using ObjectList = std::vector<std::unique_ptr<GameObject>>;
 	using LayerArray = std::array<ObjectList, LAYERMAX>;
 
 	LayerArray m_gameobjects;			// 描画・更新対象
@@ -43,7 +43,7 @@ public:
 	Camera* getcamera() { return m_camera.get(); }
 
 	template <typename T>
-	T* addGameObject(int layer)
+	T* AddGameObject(int layer)
 	{
 		assert(layer >= 0 && layer < static_cast<int>(LAYERMAX));
 
@@ -61,7 +61,7 @@ public:
 	{
 		for (auto& objectList : m_gameobjects)
 		{
-			for (auto& object : objectList)		// object は unique_ptr<gameobject>&
+			for (auto& object : objectList)		// object は unique_ptr<GameObject>&
 			{
 				if (typeid(*object) == typeid(T))	// RTTI で厳密に型一致を判定
 				{
