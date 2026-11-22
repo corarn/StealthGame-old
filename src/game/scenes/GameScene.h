@@ -3,10 +3,10 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
-#include "../system/IScene.h"
-#include "../system/SceneClassFactory.h"
-#include "../system/C3DShape.h"
-#include "../gameobject/gameobject.h"
+#include "../../system/IScene.h"
+#include "../../system/SceneClassFactory.h"
+#include "../../system/C3DShape.h"
+#include "../../gameobject/gameobject.h"
 
 class GameScene : public SceneBase
 {
