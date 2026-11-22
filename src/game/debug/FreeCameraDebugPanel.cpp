@@ -1,23 +1,24 @@
-﻿#include "FreeCameraDebugWindow.h"
+﻿#include "FreeCameraDebugPanel.h"
 #include "../../system/camera.h"
 #include "../../system/DebugUI.h"
 #include "../../system/imgui/imgui.h"
 
-FreeCameraDebugWindow::FreeCameraDebugWindow(Camera* camera)
+FreeCameraDebugPanel::FreeCameraDebugPanel(Camera* camera)
 	: m_camera(camera)
 {
 }
 
-void FreeCameraDebugWindow::RegisterToDebugUI()
+void FreeCameraDebugPanel::RegisterToDebugUI()
 {
 	DebugUI::RedistDebugFunction([this]()
 	{
-		DrawWindow();
+		DrawPanel();
 	});
 }
 
-void FreeCameraDebugWindow::DrawWindow()
+void FreeCameraDebugPanel::DrawPanel()
 {
-	ImGui::Begin("Free Camera");
-	ImGui::End();
+	if (ImGui::CollapsingHeader("Free Camera"))
+	{
+	}
 }

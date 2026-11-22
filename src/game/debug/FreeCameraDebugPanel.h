@@ -2,15 +2,15 @@
 
 class Camera;
 
-class FreeCameraDebugWindow
+class FreeCameraDebugPanel
 {
 private:
 	Camera* m_camera = nullptr;
 
-	void DrawWindow();
+	void DrawPanel();
 
 public:
-	explicit FreeCameraDebugWindow(Camera* camera);
+	explicit FreeCameraDebugPanel(Camera* camera);
 
 	void RegisterToDebugUI();
 };

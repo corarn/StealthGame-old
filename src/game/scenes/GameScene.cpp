@@ -16,8 +16,8 @@ void GameScene::init()
 {
 	// 親（SceneBase）の m_camera を使ってる。敵とかが getcamera() でカメラを聞けるように
 	m_camera = std::make_unique<Camera>(CAMERA_POSITION, CAMERA_LOOKAT, CAMERA_UP);
-	m_freeCameraWindow = std::make_unique<FreeCameraDebugWindow>(m_camera.get());
-	m_freeCameraWindow->RegisterToDebugUI();
+	m_freeCameraPanel = std::make_unique<FreeCameraDebugPanel>(m_camera.get());
+	m_freeCameraPanel->RegisterToDebugUI();
 
 	// Segment を描く前に1回呼ぶ（線用のシェーダーをここで読み込む）
 	LineDrawerInit();

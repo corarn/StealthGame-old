@@ -144,7 +144,7 @@
     <ClInclude Include="src\fpscontrol.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\gameobject\gameobject.h" />
-    <ClInclude Include="src\game\debug\FreeCameraDebugWindow.h" />
+    <ClInclude Include="src\game\debug\FreeCameraDebugPanel.h" />
     <ClInclude Include="src\game\scenes\GameScene.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\system\AimOrientation.h" />
@@ -214,7 +214,7 @@
   <ItemGroup>
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\game.cpp" />
-    <ClCompile Include="src\game\debug\FreeCameraDebugWindow.cpp" />
+    <ClCompile Include="src\game\debug\FreeCameraDebugPanel.cpp" />
     <ClCompile Include="src\game\scenes\GameScene.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\system\BoxDrawer.cpp" />

@@ -7,7 +7,7 @@
 #include "../../system/SceneClassFactory.h"
 #include "../../system/C3DShape.h"
 #include "../../gameobject/gameobject.h"
-#include "../debug/FreeCameraDebugWindow.h"
+#include "../debug/FreeCameraDebugPanel.h"
 
 class GameScene : public SceneBase
 {
@@ -34,7 +34,7 @@ private:
 	std::array<AxisLine, AXIS_COUNT> m_axisLines = {};
 
 	// 画面にカメラのデバッグ表示
-	std::unique_ptr<FreeCameraDebugWindow> m_freeCameraWindow = nullptr;
+	std::unique_ptr<FreeCameraDebugPanel> m_freeCameraPanel = nullptr;
 
 public:
 	void update(uint64_t deltaTimeMicrosec) override;
