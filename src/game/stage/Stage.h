@@ -1,9 +1,16 @@
 ﻿#pragma once
 #include <cstdint>
+#include <memory>
 #include "../../gameobject/GameObject.h"
+#include "../../system/CGmdlMesh.h"
+#include "../../system/CGmdlMeshRenderer.h"
 
 class Stage : public GameObject
 {
+private:
+	std::unique_ptr<CGmdlMesh>         m_mesh     = nullptr;
+	std::unique_ptr<CGmdlMeshRenderer> m_renderer = nullptr;
+
 public:
 	explicit Stage(SceneBase* scene);
 
