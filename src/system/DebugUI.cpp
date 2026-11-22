@@ -60,13 +60,14 @@ void DebugUI::Render() {
     ImGuiIO& io = ImGui::GetIO();
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
-    ImGui::End();
-
     // デバッグ関数の実行
     for (auto& f : m_debugfunction)
     {
         f();
     }
+
+    // 登録した欄もこの窓の中に並べるため、End を for の下に移した（窓を1つにまとめる） mod 20261122
+    ImGui::End();
 
     // フレームのレンダリングを完了
     ImGui::Render();
