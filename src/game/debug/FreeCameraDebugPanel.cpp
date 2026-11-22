@@ -46,7 +46,9 @@ void FreeCameraDebugPanel::DrawPanel()
 		ImGui::SliderFloat ("Radius",    &m_radius,       MIN_RADIUS,        MAX_RADIUS);
 		ImGui::SliderAngle ("Elevation", &m_elevationRad, MIN_ELEVATION_DEG, MAX_ELEVATION_DEG);
 		ImGui::SliderAngle ("Azimuth",   &m_azimuthRad,   MIN_AZIMUTH_DEG,   MAX_AZIMUTH_DEG);
-		ImGui::SliderFloat3("Lookat",    &m_lookat.x,     -LOOKAT_RANGE,     LOOKAT_RANGE);
+		ImGui::SliderFloat ("Lookat X",  &m_lookat.x,     -LOOKAT_RANGE,     LOOKAT_RANGE);
+		ImGui::SliderFloat ("Lookat Y",  &m_lookat.y,     -LOOKAT_RANGE,     LOOKAT_RANGE);
+		ImGui::SliderFloat ("Lookat Z",  &m_lookat.z,     -LOOKAT_RANGE,     LOOKAT_RANGE);
 
 		ApplyToCamera();  // パネルを閉じてるときはカメラを触らない
 	}
