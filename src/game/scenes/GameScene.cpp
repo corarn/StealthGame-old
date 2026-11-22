@@ -1,5 +1,6 @@
 ﻿#include "GameScene.h"
 #include "../../system/LineDrawer.h"
+#include "../stage/Stage.h"
 
 namespace
 {
@@ -18,6 +19,8 @@ void GameScene::Init()
 	m_camera = std::make_unique<Camera>(CAMERA_POSITION, CAMERA_LOOKAT, CAMERA_UP);
 	m_freeCameraPanel = std::make_unique<FreeCameraDebugPanel>(m_camera.get());
 	m_freeCameraPanel->RegisterToDebugUI();
+
+	AddGameObject<Stage>(/* layer = */ 0);
 
 	// Segment を描く前に1回呼ぶ（線用のシェーダーをここで読み込む）
 	LineDrawerInit();

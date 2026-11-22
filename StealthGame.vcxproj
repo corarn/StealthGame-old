@@ -146,6 +146,7 @@
     <ClInclude Include="src\gameobject\GameObject.h" />
     <ClInclude Include="src\game\debug\FreeCameraDebugPanel.h" />
     <ClInclude Include="src\game\scenes\GameScene.h" />
+    <ClInclude Include="src\game\stage\Stage.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\system\AimOrientation.h" />
     <ClInclude Include="src\system\BoxDrawer.h" />
@@ -216,6 +217,7 @@
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\game\debug\FreeCameraDebugPanel.cpp" />
     <ClCompile Include="src\game\scenes\GameScene.cpp" />
+    <ClCompile Include="src\game\stage\Stage.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\system\BoxDrawer.cpp" />
     <ClCompile Include="src\system\C3DShape.cpp" />
