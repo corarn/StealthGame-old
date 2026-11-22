@@ -60,6 +60,7 @@ bool CGmdlMesh::Load(const std::string& filename,
 	m_diffusetexturenames.clear();
 	m_diffusetextures.clear();
 	m_normaltextures.clear();
+	m_emissivetextures.clear();
 	m_model = gmdl::Model{};
 
 	// ---- 区間計測 -----------------------------------------------------------
@@ -175,6 +176,7 @@ bool CGmdlMesh::Load(const std::string& filename,
 	m_diffusetexturenames.reserve(m_model.materials.size());
 	m_diffusetextures.resize(m_model.materials.size());
 	m_normaltextures.resize(m_model.materials.size());
+	m_emissivetextures.resize(m_model.materials.size());
 
 	// ---- テクスチャの並列読み込み --------------------------------------------
 	// PNG のデコード（stb_image）がモデル読み込み時間の大半を占めるので、
@@ -201,6 +203,7 @@ bool CGmdlMesh::Load(const std::string& filename,
 
 	std::vector<std::future<std::unique_ptr<CTexture>>> diffuseFutures(m_model.materials.size());
 	std::vector<std::future<std::unique_ptr<CTexture>>> normalFutures(m_model.materials.size());
+	std::vector<std::future<std::unique_ptr<CTexture>>> emissiveFutures(m_model.materials.size());
 
 	if (options.loadTextures) {
 		for (std::size_t i = 0; i < m_model.materials.size(); ++i) {
@@ -210,6 +213,9 @@ bool CGmdlMesh::Load(const std::string& filename,
 			}
 			if (src.normalTexture.IsValid()) {
 				normalFutures[i] = std::async(std::launch::async, loadTextureTask, src.normalTexture);
+			}
+			if (src.emissiveTexture.IsValid()) {
+				emissiveFutures[i] = std::async(std::launch::async, loadTextureTask, src.emissiveTexture);
 			}
 		}
 	}
@@ -254,6 +260,15 @@ bool CGmdlMesh::Load(const std::string& filename,
 		if (normalFutures[i].valid()) {
 			if (auto texture = normalFutures[i].get()) {
 				m_normaltextures[i] = std::move(texture);
+			}
+		}
+
+		// ---- 発光テクスチャ（PBR パスの t5 用）--------------------------------
+		// 発光テクスチャは「色」なので、色のテクスチャと同じく UNORM のまま読み、
+		// シェーダ側でリニアに戻す。読めなくても失敗にはしない（発光の色だけで光る）。
+		if (emissiveFutures[i].valid()) {
+			if (auto texture = emissiveFutures[i].get()) {
+				m_emissivetextures[i] = std::move(texture);
 			}
 		}
 

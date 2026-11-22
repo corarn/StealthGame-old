@@ -73,6 +73,9 @@ public:
 	/// 法線マップ群の所有権を渡す（同上。PBR パスの t4 用）
 	std::vector<std::unique_ptr<CTexture>> GetNormalTextures() { return std::move(m_normaltextures); }
 
+	/// 発光テクスチャ群の所有権を渡す（同上。PBR パスの t5 用）
+	std::vector<std::unique_ptr<CTexture>> GetEmissiveTextures() { return std::move(m_emissivetextures); }
+
 	// ---- .gmdl 固有 ---------------------------------------------------------
 
 	/// ノード階層・ボーン・アニメーションを参照する。
@@ -88,6 +91,7 @@ private:
 	std::vector<SUBSET>						m_subsets;				// サブセット情報
 	std::vector<std::unique_ptr<CTexture>>	m_diffusetextures;		// ディフューズテクスチャ群
 	std::vector<std::unique_ptr<CTexture>>	m_normaltextures;		// 法線マップ群（PBR 用）
+	std::vector<std::unique_ptr<CTexture>>	m_emissivetextures;		// 発光テクスチャ群（PBR 用）
 
 	gm31::model::Model						m_model;				// ノード／ボーン／アニメーション
 	std::string								m_lastError;

@@ -26,6 +26,7 @@ public:
 	/// 呼んでから使うこと。従来の Draw() との違いは、サブセット毎に
 	///   - PBR マテリアル（b8）
 	///   - 法線マップ（t4）
+	///   - 発光テクスチャ（t5）
 	/// を追加でセットする点だけ。
 	void DrawPbr();
 
@@ -51,6 +52,7 @@ private:
 	std::vector<SUBSET>						m_subsets;
 	std::vector<std::unique_ptr<CTexture>>	m_diffuseTextures;
 	std::vector<std::unique_ptr<CTexture>>	m_normalTextures;		// PBR の t4 用
+	std::vector<std::unique_ptr<CTexture>>	m_emissiveTextures;		// PBR の t5 用
 	std::vector<std::unique_ptr<CMaterial>>	m_materials;
 	std::vector<std::unique_ptr<CPbrMaterial>>	m_pbrMaterials;		// PBR の b8 用
 	bool									m_hasPbrData = false;	// PBRM チャンク入りだったか

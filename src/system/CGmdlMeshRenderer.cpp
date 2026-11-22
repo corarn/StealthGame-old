@@ -11,6 +11,7 @@ void CGmdlMeshRenderer::Init(CGmdlMesh& mesh)
 	m_subsets         = mesh.GetSubsets();
 	m_diffuseTextures = mesh.GetDiffuseTextures();		// 所有権を受け取る（破壊的）
 	m_normalTextures  = mesh.GetNormalTextures();		// 同上（PBR の t4 用）
+	m_emissiveTextures = mesh.GetEmissiveTextures();	// 同上（PBR の t5 用）
 
 	// マテリアルごとにコンスタントバッファを用意する
 	const std::vector<MATERIAL>& materials = mesh.GetMaterials();
@@ -152,6 +153,11 @@ void CGmdlMeshRenderer::DrawPbr()
 		// t4: 法線マップ（読めていれば）
 		if (subset.MaterialIdx < m_normalTextures.size() && m_normalTextures[subset.MaterialIdx]) {
 			m_normalTextures[subset.MaterialIdx]->SetGPU(4);
+		}
+
+		// t5: 発光テクスチャ（読めていれば）
+		if (subset.MaterialIdx < m_emissiveTextures.size() && m_emissiveTextures[subset.MaterialIdx]) {
+			m_emissiveTextures[subset.MaterialIdx]->SetGPU(5);
 		}
 
 		DrawSubset(
