@@ -159,6 +159,9 @@ void CGmdlSkeleton::Build(const gmdl::Model& model)
 	m_world.resize(count);
 	m_rotation.assign(count, Vector3(0.0f, 0.0f, 0.0f));
 	m_translation.assign(count, Vector3(0.0f, 0.0f, 0.0f));
+	m_localOverride.assign(count, Matrix4x4::Identity);
+	m_hasOverride.assign(count, 0);
+	m_localOverrideCount = 0;
 
 	for (std::size_t i = 0; i < count; ++i) {
 		const gmdl::Node& src = model.nodes[i];
@@ -287,6 +290,31 @@ Vector3 CGmdlSkeleton::GetBindCorrectionTranslation() const
 }
 
 //------------------------------------------------------------------------------
+void CGmdlSkeleton::SetNodeLocal(int nodeIndex, const Matrix4x4& local)
+{
+	if (nodeIndex < 0 || static_cast<std::size_t>(nodeIndex) >= m_nodes.size()) {
+		return;
+	}
+	const std::size_t i = static_cast<std::size_t>(nodeIndex);
+	if (!m_hasOverride[i]) {
+		m_hasOverride[i] = 1;
+		++m_localOverrideCount;
+	}
+	m_localOverride[i] = local;
+}
+
+//------------------------------------------------------------------------------
+void CGmdlSkeleton::ClearNodeLocals()
+{
+	if (m_localOverrideCount == 0) {
+		return;
+	}
+	m_hasOverride.assign(m_hasOverride.size(), 0);
+	m_localOverrideCount = 0;
+	Update();
+}
+
+//------------------------------------------------------------------------------
 void CGmdlSkeleton::SetBindCorrectionEnabled(bool enable)
 {
 	if (m_applyBindCorrection == enable) {
@@ -323,7 +351,9 @@ void CGmdlSkeleton::Update()
 		const Vector3& rot = m_rotation[i];
 		const Vector3& pos = m_translation[i];
 
-		Matrix4x4 local = m_bindLocal[i];
+		// アニメが差し込んだ行列があればそれを土台にする。
+		// 無ければファイル由来のバインドポーズ。
+		Matrix4x4 local = m_hasOverride[i] ? m_localOverride[i] : m_bindLocal[i];
 
 		// 差分がゼロのときは行列を掛けない。
 		// バインドポーズを浮動小数の誤差で汚さないための小細工でもある。

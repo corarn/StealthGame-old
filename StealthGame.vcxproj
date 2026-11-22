@@ -160,6 +160,8 @@
     <ClInclude Include="src\system\CCylinderMesh.h" />
     <ClInclude Include="src\system\CDirectInput.h" />
     <ClInclude Include="src\system\CEnvironmentCube.h" />
+    <ClInclude Include="src\system\BoneCombMatrix.h" />
+    <ClInclude Include="src\system\CGmdlBonePalette.h" />
     <ClInclude Include="src\system\CGmdlMesh.h" />
     <ClInclude Include="src\system\CGmdlMeshRenderer.h" />
     <ClInclude Include="src\system\CGmdlSkeleton.h" />
@@ -230,6 +232,8 @@
     <ClCompile Include="src\system\CConeMesh.cpp" />
     <ClCompile Include="src\system\CCylinderMesh.cpp" />
     <ClCompile Include="src\system\CEnvironmentCube.cpp" />
+    <ClCompile Include="src\system\BoneCombMatrix.cpp" />
+    <ClCompile Include="src\system\CGmdlBonePalette.cpp" />
     <ClCompile Include="src\system\CGmdlMesh.cpp">
       <!-- UTF-8 ソースの日本語文字列（エラーメッセージ）を UTF-8 のまま埋め込む。ImGui 表示の文字化け対策 -->
       <AdditionalOptions>/execution-charset:utf-8 %(AdditionalOptions)</AdditionalOptions>

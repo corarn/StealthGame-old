@@ -127,6 +127,22 @@ public:
 	[[nodiscard]] Vector3& JointRotation(int nodeIndex) { return m_rotation[nodeIndex]; }
 	[[nodiscard]] const Vector3& JointRotation(int nodeIndex) const { return m_rotation[nodeIndex]; }
 
+	//--------------------------------------------------------------------------
+	// アニメーションの差し込み（20260804 モーションブレンド版から持ってきた）
+	//
+	//  アニメは「差分」ではなく、関節のローカル行列そのものを持っている。
+	//  だから Rdelta / Tdelta ではなく、bindLocal の代わりに使う行列として差し込む。
+	//
+	//  ★ bindLocal は書き換えない。上書きを消せば必ずバインドポーズへ戻る。
+	//  ★ 手で付けた回転差分（JointRotation）はこの上に乗る。
+	//--------------------------------------------------------------------------
+
+	/// ノードのローカル行列を上書きする（Update() は呼ばない）
+	void SetNodeLocal(int nodeIndex, const Matrix4x4& local);
+
+	/// 上書きを全部消してバインドポーズへ戻す（Update() まで行う）
+	void ClearNodeLocals();
+
 	/// 関節の平行移動差分（親空間）
 	[[nodiscard]] Vector3& JointTranslation(int nodeIndex) { return m_translation[nodeIndex]; }
 	[[nodiscard]] const Vector3& JointTranslation(int nodeIndex) const { return m_translation[nodeIndex]; }
@@ -219,6 +235,10 @@ private:
 
 	std::vector<Vector3>   m_rotation;		///< 回転差分【ラジアン】
 	std::vector<Vector3>   m_translation;	///< 平行移動差分（親空間）
+
+	std::vector<Matrix4x4> m_localOverride;	///< アニメが差し込んだローカル行列
+	std::vector<char>      m_hasOverride;	///< 上書きされているか（vector<bool> は避ける）
+	int                    m_localOverrideCount = 0;
 
 	Matrix4x4 m_bindCorrection = Matrix4x4::Identity;	///< ルートに掛ける補正
 	bool      m_hasBindCorrection  = false;
