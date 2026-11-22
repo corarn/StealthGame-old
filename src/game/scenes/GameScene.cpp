@@ -1,6 +1,7 @@
 ﻿#include "GameScene.h"
 #include "../../system/LineDrawer.h"
 #include "../stage/Stage.h"
+#include <iostream>
 
 namespace
 {
@@ -19,6 +20,12 @@ void GameScene::Init()
 	m_camera = std::make_unique<Camera>(CAMERA_POSITION, CAMERA_LOOKAT, CAMERA_UP);
 	m_freeCameraPanel = std::make_unique<FreeCameraDebugPanel>(m_camera.get());
 	m_freeCameraPanel->RegisterToDebugUI();
+
+	m_environment = std::make_unique<CEnvironmentCube>();
+	if (!m_environment->Init())
+	{
+		std::cout << "GameScene: CEnvironmentCube の定数バッファを作れなかった" << std::endl;
+	}
 
 	AddGameObject<Stage>(/* layer = */ 0);
 
@@ -41,6 +48,10 @@ void GameScene::Draw(uint64_t deltaTimeMicrosec)
 	// 3D のものを描くより先に呼ぶ
 	// ビュー行列とプロジェクション行列を GPU に送る
 	m_camera->Draw();
+
+	// PBR で描く物より先に送る。カメラはフリーカメラで動くので、動いたあとの位置を毎フレーム送る
+	m_environment->Update(*m_camera);
+	m_environment->Bind();
 
 	DrawGameObjects(deltaTimeMicrosec);
 

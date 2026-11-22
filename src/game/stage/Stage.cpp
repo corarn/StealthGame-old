@@ -7,7 +7,7 @@
 namespace
 {
 	constexpr const char* MODEL_PATH = "assets/model/depot/depotPBR.gmdl";
-	constexpr const char* SHADER_KEY = "VertexLighting";
+	constexpr const char* SHADER_KEY = "Pbr";
 }
 
 Stage::Stage(SceneBase* scene)
@@ -20,7 +20,7 @@ void Stage::Init()
 	if (!ShaderManager::Contains(SHADER_KEY))
 	{
 		std::unique_ptr<CShader> shader = std::make_unique<CShader>();
-		shader->Create("shader/vertexLightingVS.hlsl", "shader/vertexLightingPS.hlsl");
+		shader->Create("shader/pbrVS.hlsl", "shader/pbrPS.hlsl");
 		ShaderManager::Register<CShader>(SHADER_KEY, std::move(shader));
 	}
 
@@ -52,7 +52,7 @@ void Stage::Draw(uint64_t deltaTimeMicrosec)
 	Matrix4x4 world = m_srt.GetMatrix();
 	Renderer::SetWorldMatrix(&world);
 
-	m_renderer->Draw();
+	m_renderer->DrawPbr();
 }
 
 void Stage::Dispose()
