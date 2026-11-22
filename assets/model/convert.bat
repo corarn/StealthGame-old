@@ -8,4 +8,5 @@ rem このファイルは Shift-JIS で保存する。UTF-8 だと cmd が日本語のコメントを命令
 
 cd /d %~dp0
 .\modelconverterDDSBC7.exe --bc7 depot\depot.glb
+.\modelconverterDDSBC7.exe --bc7 player\player.glb
 pause
