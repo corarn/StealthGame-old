@@ -8,3 +8,10 @@ imgui.ini
 
 # devlog・企画シートは自分用のメモなので git に入れない（Obsidian に反映して残す）
 docs/
+
+# 変換で作られるモデル（90MB あって GitHub の上限 100MiB に近い）。assets/model/convert.bat で作り直せる
+*.gmdl
+
+# 鈴木先生の変換ツール。先生が作ったものなので公開しない
+assets/model/modelconverterDDSBC7.exe
+assets/model/assimp-vc145-mtd.dll
