@@ -30,6 +30,11 @@ SamplerState g_SamplerState : register(s0);
 //   0 … 何もしない（CTexture を DXGI_FORMAT_R8G8B8A8_UNORM_SRGB に変えたらこちら）
 #define ALBEDO_TEXTURE_IS_SRGB_DATA 1
 
+// a がこれより小さいところは描かずに捨てる（glTF の alphaMode MASK と同じ）。
+// 0.5 は glTF の alphaCutoff の既定値。.gmdl には材質ごとの値が残らないので、全部の材質でこの値を使う。
+// 今のマップの透明は a が 0 か 1 だけなので、0.5 から少し動かしても見た目は変わらない。
+static const float ALPHA_CUTOFF = 0.5f;
+
 float4 main(PBR_PS_IN In) : SV_Target
 {
     float3 N = normalize(In.WorldNormal);
@@ -56,6 +61,9 @@ float4 main(PBR_PS_IN In) : SV_Target
 #endif
         base.a *= tex.a;
     }
+    
+    // 透明なところは深度も書かずに捨てる。捨てないと、あとから描く地面が深度テストではじかれて、背景の青が見える。
+    clip(base.a - ALPHA_CUTOFF);
 
     const float3 albedo    = base.rgb;
     const float  metallic  = saturate(PbrMetallic);
