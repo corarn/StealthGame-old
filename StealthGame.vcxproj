@@ -258,6 +258,7 @@
     <ClCompile Include="src\system\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="src\system\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\system\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="src\system\IScene.cpp" />
     <ClCompile Include="src\system\LineDrawer.cpp" />
     <ClCompile Include="src\system\meshmanager.cpp" />
     <ClCompile Include="src\system\PlaneDrawer.cpp" />

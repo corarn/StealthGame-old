@@ -30,6 +30,7 @@ void GameScene::Init()
 
 void GameScene::Update(uint64_t deltaTimeMicrosec)
 {
+	UpdateGameObjects(deltaTimeMicrosec);
 }
 
 void GameScene::Draw(uint64_t deltaTimeMicrosec)
@@ -37,6 +38,8 @@ void GameScene::Draw(uint64_t deltaTimeMicrosec)
 	// 3D のものを描くより先に呼ぶ
 	// ビュー行列とプロジェクション行列を GPU に送る
 	m_camera->Draw();
+
+	DrawGameObjects(deltaTimeMicrosec);
 
 	for (std::size_t i = 0; i < AXIS_COUNT; ++i)
 	{

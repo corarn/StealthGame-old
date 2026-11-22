@@ -35,6 +35,10 @@ protected:
 
 	std::unique_ptr<Camera> m_camera;	// カメラ
 
+	// 物のリストを回す。シーンの Update・Draw から呼ぶ add 20261122
+	void UpdateGameObjects(uint64_t deltaTimeMicrosec);
+	void DrawGameObjects(uint64_t deltaTimeMicrosec);
+
 public:
 	Camera* getcamera() { return m_camera.get(); }
 
@@ -44,7 +48,7 @@ public:
 		assert(layer >= 0 && layer < static_cast<int>(LAYERMAX));
 
 		auto obj = std::make_unique<T>(this);
-		obj->init();
+		obj->Init();
 
 		T* rawPtr = obj.get();
 		m_pendingAddObjects[layer].push_back(std::move(obj));
