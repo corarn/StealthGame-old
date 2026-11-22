@@ -1,15 +1,16 @@
 ﻿#include "GameScene.h"
 #include "../../system/LineDrawer.h"
 #include "../stage/Stage.h"
+#include "../player/Player.h"
 #include "../../system/renderer.h"
 #include <iostream>
 
 namespace
 {
-	// 仮のカメラ位置。マップ全体（約 320m 四方）が見える高さ。追従カメラを作ったら消す
-	constexpr Vector3 CAMERA_POSITION = Vector3(0.0f, 200.0f, -250.0f);
-	constexpr Vector3 CAMERA_LOOKAT   = Vector3(0.0f,   0.0f,    0.0f);
-	constexpr Vector3 CAMERA_UP       = Vector3(0.0f,   1.0f,    0.0f);
+	// 仮のカメラ位置。プレイヤーを正面（Z+ の側）の上から見る。後ろ（Z- の側）は壁で見えないため。追従カメラを作ったら消す
+	constexpr Vector3 CAMERA_POSITION = Vector3(-41.0f, 3.0f, -25.4f);
+	constexpr Vector3 CAMERA_LOOKAT   = Vector3(-41.0f, 1.0f, -31.0f);
+	constexpr Vector3 CAMERA_UP       = Vector3(  0.0f, 1.0f,   0.0f);
 
 	// 軸の線の長さ。カメラが遠いので長めにしてる
 	constexpr float AXIS_LENGTH = 20.0f;
@@ -20,6 +21,9 @@ namespace
 	constexpr float   LIGHT_INTENSITY = 1.774f;
 	constexpr float   AMBIENT         = 0.383f;
 	constexpr float   EXPOSURE_EV     = 1.954f;
+
+	// プレイヤーを最初に置く場所
+	constexpr Vector3 PLAYER_SPAWN_POSITION = Vector3(-41.0f, 0.0f, -31.0f);
 }
 
 void GameScene::Init()
@@ -50,6 +54,9 @@ void GameScene::Init()
 	m_lightingPanel->RegisterToDebugUI();
 
 	AddGameObject<Stage>(/* layer = */ 0);
+
+	Player* player = AddGameObject<Player>(/* layer = */ 0);
+	player->SetPosition(PLAYER_SPAWN_POSITION);
 
 	// Segment を描く前に1回呼ぶ（線用のシェーダーをここで読み込む）
 	LineDrawerInit();
