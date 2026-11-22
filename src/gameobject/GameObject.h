@@ -26,7 +26,7 @@ public:
 		m_srt = srt;
 	}
 
-	void	setPosition(const Vector3& pos) {
+	void	SetPosition(const Vector3& pos) {
 		m_srt.pos = pos;
 	}
 
