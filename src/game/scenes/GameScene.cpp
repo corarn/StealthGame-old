@@ -12,7 +12,7 @@ namespace
 	constexpr float AXIS_LENGTH = 20.0f;
 }
 
-void GameScene::init()
+void GameScene::Init()
 {
 	// 親（SceneBase）の m_camera を使ってる。敵とかが getcamera() でカメラを聞けるように
 	m_camera = std::make_unique<Camera>(CAMERA_POSITION, CAMERA_LOOKAT, CAMERA_UP);
@@ -28,11 +28,11 @@ void GameScene::init()
 	}
 }
 
-void GameScene::update(uint64_t deltaTimeMicrosec)
+void GameScene::Update(uint64_t deltaTimeMicrosec)
 {
 }
 
-void GameScene::draw(uint64_t deltaTimeMicrosec)
+void GameScene::Draw(uint64_t deltaTimeMicrosec)
 {
 	// 3D のものを描くより先に呼ぶ
 	// ビュー行列とプロジェクション行列を GPU に送る
@@ -44,6 +44,6 @@ void GameScene::draw(uint64_t deltaTimeMicrosec)
 	}
 }
 
-void GameScene::dispose()
+void GameScene::Dispose()
 {
 }

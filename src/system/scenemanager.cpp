@@ -7,7 +7,7 @@ void SceneManager::Dispose()
 	// 登録されているすべてシーンの終了処理
 	for (auto& s : m_scenes) 
 	{
-		s.second->dispose();
+		s.second->Dispose();
 	}
 
 	m_scenes.clear();
@@ -18,7 +18,7 @@ void SceneManager::SetCurrentScene(std::string currentscenename)
 {
 	m_currentSceneName = currentscenename;
 	auto obj = SceneClassFactory::getInstance().create(currentscenename);
-	obj->init();
+	obj->Init();
 	m_scenes[m_currentSceneName] = std::move(obj);
 }
 
@@ -30,11 +30,11 @@ void SceneManager::Draw(uint64_t deltatime)
 {
 
 	// 現在のシーンを描画
-	m_scenes[m_currentSceneName]->draw(deltatime);
+	m_scenes[m_currentSceneName]->Draw(deltatime);
 }
 
 void SceneManager::Update(uint64_t deltatime)
 {
 	// 現在のシーンを更新
-	m_scenes[m_currentSceneName]->update(deltatime);
+	m_scenes[m_currentSceneName]->Update(deltatime);
 }

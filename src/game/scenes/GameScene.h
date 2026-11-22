@@ -37,10 +37,10 @@ private:
 	std::unique_ptr<FreeCameraDebugPanel> m_freeCameraPanel = nullptr;
 
 public:
-	void update(uint64_t deltaTimeMicrosec) override;
-	void draw(uint64_t deltaTimeMicrosec) override;
-	void init() override;
-	void dispose() override;
+	void Update(uint64_t deltaTimeMicrosec) override;
+	void Draw(uint64_t deltaTimeMicrosec) override;
+	void Init() override;
+	void Dispose() override;
 };
 
 REGISTER_CLASS(GameScene)
