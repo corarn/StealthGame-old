@@ -1,6 +1,7 @@
 ﻿#include "Player.h"
 #include <iostream>
 #include "../../system/CShader.h"
+#include "../../system/Inputmanager.h"
 #include "../../system/meshmanager.h"
 #include "../../system/renderer.h"
 
@@ -16,6 +17,9 @@ namespace
 
 	// player.glb に入っているアニメの名前（Mixamo から持ってきたときの名前）
 	constexpr const char* IDLE_CLIP_NAME = "Idle";
+
+	// 人が歩く速さくらい（1 秒に 1.4m）。足がすべって見えたら、Walk のアニメに合わせて変える
+	constexpr float MOVE_SPEED_PER_SEC = 1.4f;
 }
 
 Player::Player(SceneBase* scene)
@@ -71,6 +75,11 @@ void Player::Update(uint64_t deltaTimeMicrosec)
 	}
 
 	float deltaTimeSec = static_cast<float>(deltaTimeMicrosec) / MICROSEC_PER_SEC;
+
+	Vector2 moveInput     = ReadMoveInput();
+	Vector3 moveDirection = ConvertToCameraDirection(moveInput);
+	m_srt.pos += moveDirection * MOVE_SPEED_PER_SEC * deltaTimeSec;
+
 	m_animationPlayer->Update(deltaTimeSec);
 
 	// 骨にアニメの姿勢を入れてから、骨の行列を作って送る（逆だと 1 フレーム前の姿勢が送られる）
@@ -96,4 +105,49 @@ void Player::Draw(uint64_t deltaTimeMicrosec)
 
 void Player::Dispose()
 {
+}
+
+Vector2 Player::ReadMoveInput() const
+{
+	const CInputManager& input = CInputManager::GetInstance();
+	Vector2 moveInput = Vector2(0.0f, 0.0f);
+	if (input.IsKeyPressed(DIK_W))
+	{
+		moveInput.y += 1.0f;
+	}
+	if (input.IsKeyPressed(DIK_S))
+	{
+		moveInput.y -= 1.0f;
+	}
+	if (input.IsKeyPressed(DIK_D))
+	{
+		moveInput.x += 1.0f;
+	}
+	if (input.IsKeyPressed(DIK_A))
+	{
+		moveInput.x -= 1.0f;
+	}
+	return moveInput;
+}
+
+Vector3 Player::ConvertToCameraDirection(const Vector2& moveInput) const
+{
+	const Camera* camera = m_ownerscene->GetCamera();
+
+	// 上下の成分を消して、地面に沿わせる（下を向いたカメラでも、地面にもぐらないように）
+	Vector3 cameraForward = camera->GetLookat() - camera->GetPosition();
+	cameraForward.y = 0.0f;
+	cameraForward.Normalize();
+
+	// 上と前の外積が右になる（DirectX は左手座標）
+	Vector3 cameraRight = Vector3::Up.Cross(cameraForward);
+
+	Vector3 direction = cameraForward * moveInput.y + cameraRight * moveInput.x;
+
+	// 斜め（W と D）は長さが 1.41 になって速くなるので、1 に戻す。何も押していないときの 0 はそのまま
+	if (direction.LengthSquared() > 0.0f)
+	{
+		direction.Normalize();
+	}
+	return direction;
 }

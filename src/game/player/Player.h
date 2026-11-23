@@ -23,6 +23,12 @@ private:
 	// 今流しているアニメ。Idle・Walk・Run を切り替える
 	std::unique_ptr<AnimationPlayer> m_animationPlayer = nullptr;
 
+	// WASD の押し具合。x は右が +1・左が -1、y は前が +1・後ろが -1。何も押していなければ (0, 0)
+	Vector2 ReadMoveInput() const;
+
+	// 入力を、今のカメラから見た向きに直す（W ＝ 画面の奥）。地面に沿った向きで、長さは 0 か 1
+	Vector3 ConvertToCameraDirection(const Vector2& moveInput) const;
+
 public:
 	explicit Player(SceneBase* scene);
 
