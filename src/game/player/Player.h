@@ -6,6 +6,7 @@
 #include "../../system/CGmdlMeshRenderer.h"
 #include "../../system/CGmdlSkeleton.h"
 #include "../../system/CGmdlBonePalette.h"
+#include "../animation/AnimationPlayer.h"
 
 class Player : public GameObject
 {
@@ -18,6 +19,9 @@ private:
 
 	// 骨の行列を GPU（b5）に送る係
 	std::unique_ptr<CGmdlBonePalette> m_bonePalette = nullptr;
+
+	// 今流しているアニメ。Idle・Walk・Run を切り替える
+	std::unique_ptr<AnimationPlayer> m_animationPlayer = nullptr;
 
 public:
 	explicit Player(SceneBase* scene);

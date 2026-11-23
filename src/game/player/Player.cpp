@@ -10,6 +10,12 @@ namespace
 
 	// 骨の行列で頂点を動かす PBR のシェーダ。動かない Stage の "Pbr" とは別にする
 	constexpr const char* SHADER_KEY = "PbrSkin";
+
+	// 土台から来る時間はマイクロ秒。アニメは秒で進めるので直す
+	constexpr float MICROSEC_PER_SEC = 1000000.0f;
+
+	// player.glb に入っているアニメの名前（Mixamo から持ってきたときの名前）
+	constexpr const char* IDLE_CLIP_NAME = "Idle";
 }
 
 Player::Player(SceneBase* scene)
@@ -39,6 +45,12 @@ void Player::Init()
 	m_skeleton = std::make_unique<CGmdlSkeleton>();
 	m_skeleton->Build(mesh->GetModel());
 
+	m_animationPlayer = std::make_unique<AnimationPlayer>(mesh->GetModel());
+	if (!m_animationPlayer->Play(IDLE_CLIP_NAME))
+	{
+		std::cout << "Player: アニメ " << IDLE_CLIP_NAME << " が見つからなかった" << std::endl;
+	}
+
 	m_bonePalette = std::make_unique<CGmdlBonePalette>();
 	if (!m_bonePalette->Init(*m_skeleton))
 	{
@@ -58,6 +70,11 @@ void Player::Update(uint64_t deltaTimeMicrosec)
 		return;
 	}
 
+	float deltaTimeSec = static_cast<float>(deltaTimeMicrosec) / MICROSEC_PER_SEC;
+	m_animationPlayer->Update(deltaTimeSec);
+
+	// 骨にアニメの姿勢を入れてから、骨の行列を作って送る（逆だと 1 フレーム前の姿勢が送られる）
+	m_animationPlayer->ApplyTo(*m_skeleton);
 	m_bonePalette->Update(*m_skeleton);
 }
 
@@ -74,8 +91,6 @@ void Player::Draw(uint64_t deltaTimeMicrosec)
 	Renderer::SetWorldMatrix(&world);
 
 	m_bonePalette->SetGPU();
-
-	// 骨はまだ T ポーズのまま。崩れずに T ポーズが出れば、骨の行列の送り方が正しい
 	m_renderer->DrawPbr();
 }
 
