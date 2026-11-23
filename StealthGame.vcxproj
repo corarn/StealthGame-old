@@ -148,6 +148,7 @@
     <ClInclude Include="src\game\debug\LightingDebugPanel.h" />
     <ClInclude Include="src\game\scenes\GameScene.h" />
     <ClInclude Include="src\game\animation\AnimationPlayer.h" />
+    <ClInclude Include="src\game\animation\BonePose.h" />
     <ClInclude Include="src\game\player\Player.h" />
     <ClInclude Include="src\game\stage\Stage.h" />
     <ClInclude Include="src\main.h" />

@@ -1,4 +1,5 @@
 ﻿#include "AnimationPlayer.h"
+#include "BonePose.h"
 #include <cmath>
 #include <cstddef>
 #include <vector>
@@ -80,18 +81,6 @@ namespace
 		// 回転は Lerp で混ぜると、途中で長さが 1 でなくなり、体が縮んだりゆがんだりする。Slerp は球の表面に沿って混ぜる
 		return Quaternion::Slerp(currentValue, nextValue, ratio);
 	}
-
-	// 骨1本の、ある時間の姿勢。行列ではなく3つに分けて持つ（行列のまま混ぜると、腕や足が縮むから）
-	struct BonePose
-	{
-		Vector3    m_position   = Vector3(0.0f, 0.0f, 0.0f);
-		Quaternion m_rotation   = Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
-		Vector3    m_scale      = Vector3(1.0f, 1.0f, 1.0f);
-		bool       m_isAnimated = false;
-	};
-
-	// 番号はノードの番号（channel.nodeIndex）と同じ。アニメのないノードは m_isAnimated が false のまま
-	using Pose = std::vector<BonePose>;
 
 	// clip の timeSec 秒の姿勢を、ノードの数ぶんの表にして返す
 	Pose SamplePose(const gmdl::AnimationClip& clip, float timeSec, int nodeCount)
