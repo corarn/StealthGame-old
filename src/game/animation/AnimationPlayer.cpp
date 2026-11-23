@@ -8,6 +8,9 @@
 
 namespace
 {
+	// TODO: ステップ3で、切り替えてからの時間で 0 → 1 に変える。今は混ぜ方を確かめるための決め打ち
+	constexpr float TEMPORARY_BLEND_WEIGHT = 0.5f;
+
 	// ticks のすぐ前のキーの番号を返す（キーの時刻が 0, 10, 20, 30 で ticks = 25 なら 2）
 	// 最後のキーより後ろなら、最後のキーの番号を返す。keys は空でないこと
 	std::size_t FindKeyIndex(const std::vector<gmdl::VectorKey>& keys, float ticks)
@@ -131,6 +134,50 @@ namespace
 			skeleton.SetNodeLocal(i, local);
 		}
 	}
+
+	// from と to を weight で混ぜる（0 なら from のまま、1 なら to のまま）
+	// 片方にしかアニメがない骨は、ある方をそのまま使う。from と to は同じモデルの表なので、長さは同じ
+	Pose BlendPoses(const Pose& from, const Pose& to, float weight)
+	{
+		Pose result = Pose(from.size());
+		for (std::size_t i = 0; i < from.size(); ++i)
+		{
+			if (!from[i].m_isAnimated)
+			{
+				result[i] = to[i];
+				continue;
+			}
+			if (!to[i].m_isAnimated)
+			{
+				result[i] = from[i];
+				continue;
+			}
+
+			result[i].m_position   = Vector3::Lerp(from[i].m_position, to[i].m_position, weight);
+			result[i].m_rotation   = Quaternion::Slerp(from[i].m_rotation, to[i].m_rotation, weight);
+			result[i].m_scale      = Vector3::Lerp(from[i].m_scale, to[i].m_scale, weight);
+			result[i].m_isAnimated = true;
+		}
+		return result;
+	}
+
+	// timeSec を deltaTimeSec だけ進める。最後まで来たら最初に戻す（ループ）
+	float AdvanceTime(const gmdl::AnimationClip& clip, float timeSec, float deltaTimeSec)
+	{
+		float durationSec = clip.DurationSeconds();
+		if (durationSec <= 0.0f)
+		{
+			return timeSec;
+		}
+
+		float nextTimeSec = timeSec + deltaTimeSec;
+		if (nextTimeSec >= durationSec)
+		{
+			// 0 に戻すと、超えたぶんの時間が消えて動きが少し飛ぶ。超えたぶんだけ残して最初に戻す
+			nextTimeSec = std::fmod(nextTimeSec, durationSec);
+		}
+		return nextTimeSec;
+	}
 }
 
 AnimationPlayer::AnimationPlayer(const gmdl::Model& model)
@@ -144,10 +191,12 @@ bool AnimationPlayer::Play(const std::string& clipName)
 	{
 		if (m_model->animations[i].name == clipName)
 		{
-			if (i != m_clipIndex)
+			if (i != m_current.m_clipIndex)
 			{
-				m_clipIndex = i;
-				m_timeSec   = 0.0f;
+				// 前のアニメは止めずに流し続けて、今のアニメと混ぜる
+				m_previous = m_current;
+				m_current.m_clipIndex = i;
+				m_current.m_timeSec   = 0.0f;
 			}
 			return true;
 		}
@@ -162,19 +211,9 @@ void AnimationPlayer::Update(float deltaTimeSec)
 		return;
 	}
 
-	const gmdl::AnimationClip& clip = m_model->animations[m_clipIndex];
-	float durationSec = clip.DurationSeconds();
-	if (durationSec <= 0.0f)
-	{
-		return;
-	}
-
-	m_timeSec += deltaTimeSec;
-	if (m_timeSec >= durationSec)
-	{
-		// 0 に戻すと、超えたぶんの時間が消えて動きが少し飛ぶ。超えたぶんだけ残して最初に戻す
-		m_timeSec = std::fmod(m_timeSec, durationSec);
-	}
+	// Idle と Walk は長さが違うので、前と今で別々に時間を進める
+	m_current.m_timeSec  = AdvanceTime(m_model->animations[m_current.m_clipIndex], m_current.m_timeSec, deltaTimeSec);
+	m_previous.m_timeSec = AdvanceTime(m_model->animations[m_previous.m_clipIndex], m_previous.m_timeSec, deltaTimeSec);
 }
 
 void AnimationPlayer::ApplyTo(CGmdlSkeleton& skeleton) const
@@ -184,8 +223,10 @@ void AnimationPlayer::ApplyTo(CGmdlSkeleton& skeleton) const
 		return;
 	}
 
-	const gmdl::AnimationClip& clip = m_model->animations[m_clipIndex];
-	Pose pose = SamplePose(clip, m_timeSec, skeleton.GetNodeCount());
+	int  nodeCount    = skeleton.GetNodeCount();
+	Pose previousPose = SamplePose(m_model->animations[m_previous.m_clipIndex], m_previous.m_timeSec, nodeCount);
+	Pose currentPose  = SamplePose(m_model->animations[m_current.m_clipIndex], m_current.m_timeSec, nodeCount);
+	Pose pose         = BlendPoses(previousPose, currentPose, TEMPORARY_BLEND_WEIGHT);
 	ApplyPose(pose, skeleton);
 	skeleton.Update();
 }

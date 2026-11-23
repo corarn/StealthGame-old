@@ -16,8 +16,15 @@ private:
 	// アニメのデータ。持ち主は Player の m_mesh で、ここは借りているだけ（Player が両方持つので、こちらより先に消えない）
 	const gmdl::Model* m_model = nullptr;
 
-	int   m_clipIndex = 0;
-	float m_timeSec   = 0.0f;
+	// アニメ1本ぶんの「どれを・どこまで流したか」。切り替えた後も、前のアニメを止めずに流し続けるために2つ持つ
+	struct ClipState
+	{
+		int   m_clipIndex = 0;
+		float m_timeSec   = 0.0f;
+	};
+
+	ClipState m_current  = ClipState();
+	ClipState m_previous = ClipState();
 
 public:
 	explicit AnimationPlayer(const gmdl::Model& model);
