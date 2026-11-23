@@ -1,5 +1,6 @@
 ﻿#include "AnimationPlayer.h"
 #include "BonePose.h"
+#include <algorithm>
 #include <cmath>
 #include <cstddef>
 #include <vector>
@@ -9,8 +10,9 @@
 
 namespace
 {
-	// TODO: ステップ3で、切り替えてからの時間で 0 → 1 に変える。今は混ぜ方を確かめるための決め打ち
-	constexpr float TEMPORARY_BLEND_WEIGHT = 0.5f;
+	// アニメの切り替えにかける時間。短いとカクッと見え、長いと歩き出しが遅れて見える
+	// Unreal の Inertialization の目安（0.4 秒より短く）にも入っている。画面を見て変えてよい
+	constexpr float BLEND_DURATION_SEC = 0.2f;
 
 	// ticks のすぐ前のキーの番号を返す（キーの時刻が 0, 10, 20, 30 で ticks = 25 なら 2）
 	// 最後のキーより後ろなら、最後のキーの番号を返す。keys は空でないこと
@@ -172,6 +174,11 @@ namespace
 AnimationPlayer::AnimationPlayer(const gmdl::Model& model)
 	: m_model(&model)
 {
+	// 最初の Play で撮るときに、混ぜる相手がいないと姿勢が空になる。0 番のアニメの最初の姿勢を入れておく
+	if (!m_model->animations.empty())
+	{
+		m_fromPose = SamplePose(m_model->animations[0], 0.0f, static_cast<int>(m_model->nodes.size()));
+	}
 }
 
 bool AnimationPlayer::Play(const std::string& clipName)
@@ -182,10 +189,12 @@ bool AnimationPlayer::Play(const std::string& clipName)
 		{
 			if (i != m_current.m_clipIndex)
 			{
-				// 前のアニメは止めずに流し続けて、今のアニメと混ぜる
-				m_previous = m_current;
+				// 今画面に出ている姿勢を撮って、そこから新しいアニメへ混ぜる
+				// 混ぜている途中で切り替えても、画面の姿勢から始まるので飛ばない
+				m_fromPose            = CalculateDisplayedPose();
 				m_current.m_clipIndex = i;
 				m_current.m_timeSec   = 0.0f;
+				m_blendElapsedSec     = 0.0f;
 			}
 			return true;
 		}
@@ -200,9 +209,10 @@ void AnimationPlayer::Update(float deltaTimeSec)
 		return;
 	}
 
-	// Idle と Walk は長さが違うので、前と今で別々に時間を進める
-	m_current.m_timeSec  = AdvanceTime(m_model->animations[m_current.m_clipIndex], m_current.m_timeSec, deltaTimeSec);
-	m_previous.m_timeSec = AdvanceTime(m_model->animations[m_previous.m_clipIndex], m_previous.m_timeSec, deltaTimeSec);
+	m_current.m_timeSec = AdvanceTime(m_model->animations[m_current.m_clipIndex], m_current.m_timeSec, deltaTimeSec);
+
+	// 混ぜ終わった後も足し続けると数が大きくなり続けるので、切り替えにかける時間で止める
+	m_blendElapsedSec = std::min(m_blendElapsedSec + deltaTimeSec, BLEND_DURATION_SEC);
 }
 
 void AnimationPlayer::ApplyTo(CGmdlSkeleton& skeleton) const
@@ -212,10 +222,16 @@ void AnimationPlayer::ApplyTo(CGmdlSkeleton& skeleton) const
 		return;
 	}
 
-	int  nodeCount    = skeleton.GetNodeCount();
-	Pose previousPose = SamplePose(m_model->animations[m_previous.m_clipIndex], m_previous.m_timeSec, nodeCount);
-	Pose currentPose  = SamplePose(m_model->animations[m_current.m_clipIndex], m_current.m_timeSec, nodeCount);
-	Pose pose         = BlendPoses(previousPose, currentPose, TEMPORARY_BLEND_WEIGHT);
-	ApplyPose(pose, skeleton);
+	ApplyPose(CalculateDisplayedPose(), skeleton);
 	skeleton.Update();
+}
+
+Pose AnimationPlayer::CalculateDisplayedPose() const
+{
+	const gmdl::AnimationClip& clip = m_model->animations[m_current.m_clipIndex];
+	Pose currentPose = SamplePose(clip, m_current.m_timeSec, static_cast<int>(m_model->nodes.size()));
+
+	// 切り替えた瞬間は撮った姿勢のまま（0）、BLEND_DURATION_SEC たったら今のアニメだけ（1）
+	float weight = m_blendElapsedSec / BLEND_DURATION_SEC;
+	return BlendPoses(m_fromPose, currentPose, weight);
 }

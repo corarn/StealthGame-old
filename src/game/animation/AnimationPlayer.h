@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <string>
+#include "BonePose.h"
 
 class CGmdlSkeleton;
 
@@ -16,15 +17,24 @@ private:
 	// アニメのデータ。持ち主は Player の m_mesh で、ここは借りているだけ（Player が両方持つので、こちらより先に消えない）
 	const gmdl::Model* m_model = nullptr;
 
-	// アニメ1本ぶんの「どれを・どこまで流したか」。切り替えた後も、前のアニメを止めずに流し続けるために2つ持つ
+	// アニメ1本ぶんの「どれを・どこまで流したか」
 	struct ClipState
 	{
 		int   m_clipIndex = 0;
 		float m_timeSec   = 0.0f;
 	};
 
-	ClipState m_current  = ClipState();
-	ClipState m_previous = ClipState();
+	ClipState m_current = ClipState();
+
+	// 切り替えた瞬間に画面に出ていた姿勢。ここから今のアニメへ混ぜる。撮った後は動かない
+	// 前のアニメを流し続けずに止めるのは、混ぜている途中でまた切り替えても、画面の姿勢から始めて飛ばないようにするため
+	Pose m_fromPose = Pose();
+
+	// 切り替えてからの時間。切り替えにかける時間（.cpp の BLEND_DURATION_SEC）で止まる
+	float m_blendElapsedSec = 0.0f;
+
+	// 撮った姿勢と今のアニメを、切り替えてからの時間で混ぜた姿勢（＝今、画面に出す姿勢）
+	Pose CalculateDisplayedPose() const;
 
 public:
 	explicit AnimationPlayer(const gmdl::Model& model);
