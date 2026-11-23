@@ -28,7 +28,7 @@ namespace
 
 void GameScene::Init()
 {
-	// 親（SceneBase）の m_camera を使ってる。敵とかが getcamera() でカメラを聞けるように
+	// 親（SceneBase）の m_camera を使ってる。敵とかが GetCamera() でカメラを聞けるように
 	m_camera = std::make_unique<Camera>(CAMERA_POSITION, CAMERA_LOOKAT, CAMERA_UP);
 	m_freeCameraPanel = std::make_unique<FreeCameraDebugPanel>(m_camera.get());
 	m_freeCameraPanel->RegisterToDebugUI();

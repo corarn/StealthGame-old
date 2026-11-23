@@ -40,7 +40,7 @@ protected:
 	void DrawGameObjects(uint64_t deltaTimeMicrosec);
 
 public:
-	Camera* getcamera() { return m_camera.get(); }
+	Camera* GetCamera() { return m_camera.get(); }
 
 	template <typename T>
 	T* AddGameObject(int layer)
