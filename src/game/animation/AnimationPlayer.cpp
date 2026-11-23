@@ -21,7 +21,6 @@ namespace
 	}
 
 	// 回転のキー用。キーの型が違うだけで、中身は上と同じ
-	// TODO: テンプレートを習ったら、2つを1つにまとめる
 	std::size_t FindKeyIndex(const std::vector<gmdl::QuatKey>& keys, float ticks)
 	{
 		std::size_t index = 0;
@@ -78,6 +77,60 @@ namespace
 		// 回転は Lerp で混ぜると、途中で長さが 1 でなくなり、体が縮んだりゆがんだりする。Slerp は球の表面に沿って混ぜる
 		return Quaternion::Slerp(currentValue, nextValue, ratio);
 	}
+
+	// 骨1本の、ある時間の姿勢。行列ではなく3つに分けて持つ（行列のまま混ぜると、腕や足が縮むから）
+	struct BonePose
+	{
+		Vector3    m_position   = Vector3(0.0f, 0.0f, 0.0f);
+		Quaternion m_rotation   = Quaternion(0.0f, 0.0f, 0.0f, 1.0f);
+		Vector3    m_scale      = Vector3(1.0f, 1.0f, 1.0f);
+		bool       m_isAnimated = false;
+	};
+
+	// 番号はノードの番号（channel.nodeIndex）と同じ。アニメのないノードは m_isAnimated が false のまま
+	using Pose = std::vector<BonePose>;
+
+	// clip の timeSec 秒の姿勢を、ノードの数ぶんの表にして返す
+	Pose SamplePose(const gmdl::AnimationClip& clip, float timeSec, int nodeCount)
+	{
+		Pose pose = Pose(static_cast<std::size_t>(nodeCount));
+
+		// キーの時刻は秒ではなく「ティック」（clip.ticksPerSecond 個で 1 秒）
+		float ticks = timeSec * clip.ticksPerSecond;
+
+		for (const gmdl::NodeAnimation& channel : clip.channels)
+		{
+			// 3 つそろっていない骨は、ファイルの T ポーズのまま（player.glb は全部そろっている）
+			if (channel.positionKeys.empty() || channel.rotationKeys.empty() || channel.scaleKeys.empty())
+			{
+				continue;
+			}
+
+			BonePose& bonePose = pose[channel.nodeIndex];
+			bonePose.m_position   = Sample(channel.positionKeys, ticks);
+			bonePose.m_rotation   = Sample(channel.rotationKeys, ticks);
+			bonePose.m_scale      = Sample(channel.scaleKeys, ticks);
+			bonePose.m_isAnimated = true;
+		}
+		return pose;
+	}
+
+	// 表の姿勢を骨格に入れる。m_isAnimated が false のノードは、ファイルの T ポーズのまま
+	void ApplyPose(const Pose& pose, CGmdlSkeleton& skeleton)
+	{
+		for (int i = 0; i < static_cast<int>(pose.size()); ++i)
+		{
+			const BonePose& bonePose = pose[i];
+			if (!bonePose.m_isAnimated)
+			{
+				continue;
+			}
+
+			// 大きさ → 回転 → 位置 の順に掛ける。逆にすると、骨が自分の根元ではなく親の根元を中心に回ってしまう
+			Matrix4x4 local = Matrix4x4::CreateScale(bonePose.m_scale) * Matrix4x4::CreateFromQuaternion(bonePose.m_rotation) * Matrix4x4::CreateTranslation(bonePose.m_position);
+			skeleton.SetNodeLocal(i, local);
+		}
+	}
 }
 
 AnimationPlayer::AnimationPlayer(const gmdl::Model& model)
@@ -132,26 +185,7 @@ void AnimationPlayer::ApplyTo(CGmdlSkeleton& skeleton) const
 	}
 
 	const gmdl::AnimationClip& clip = m_model->animations[m_clipIndex];
-
-	// キーの時刻は秒ではなく「ティック」（clip.ticksPerSecond 個で 1 秒）
-	float ticks = m_timeSec * clip.ticksPerSecond;
-
-	for (const gmdl::NodeAnimation& channel : clip.channels)
-	{
-		// 3 つそろっていない骨は、ファイルの T ポーズのまま（player.glb は全部そろっている）
-		if (channel.positionKeys.empty() || channel.rotationKeys.empty() || channel.scaleKeys.empty())
-		{
-			continue;
-		}
-
-		Vector3    position = Sample(channel.positionKeys, ticks);
-		Quaternion rotation = Sample(channel.rotationKeys, ticks);
-		Vector3    scale    = Sample(channel.scaleKeys, ticks);
-
-		// 大きさ → 回転 → 位置 の順に掛ける。逆にすると、骨が自分の根元ではなく親の根元を中心に回ってしまう
-		Matrix4x4 local = Matrix4x4::CreateScale(scale) * Matrix4x4::CreateFromQuaternion(rotation) * Matrix4x4::CreateTranslation(position);
-		skeleton.SetNodeLocal(channel.nodeIndex, local);
-	}
-
+	Pose pose = SamplePose(clip, m_timeSec, skeleton.GetNodeCount());
+	ApplyPose(pose, skeleton);
 	skeleton.Update();
 }
