@@ -81,7 +81,7 @@ public:
 	/// ノード階層・ボーン・アニメーションを参照する。
 	/// メモリ節約のため、頂点／インデックスは VERTEX_3D へ変換した時点で
 	/// 捨ててある（二重に持たない）。形状は GetVertices() / GetIndices() を使うこと。
-	const gm31::model::Model& GetModel() const { return m_model; }
+	const gmdl::Model& GetModel() const { return m_model; }
 
 	const std::string& GetLastError() const { return m_lastError; }
 
@@ -93,6 +93,6 @@ private:
 	std::vector<std::unique_ptr<CTexture>>	m_normaltextures;		// 法線マップ群（PBR 用）
 	std::vector<std::unique_ptr<CTexture>>	m_emissivetextures;		// 発光テクスチャ群（PBR 用）
 
-	gm31::model::Model						m_model;				// ノード／ボーン／アニメーション
+	gmdl::Model						m_model;				// ノード／ボーン／アニメーション
 	std::string								m_lastError;
 };

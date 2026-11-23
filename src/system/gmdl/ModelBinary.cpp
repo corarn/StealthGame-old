@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <unordered_map>
 
-namespace gm31::model {
+namespace gmdl {
 namespace {
 
 static_assert(std::endian::native == std::endian::little,
@@ -708,4 +708,4 @@ std::string Describe(const Model& model)
     return os.str();
 }
 
-} // namespace gm31::model
+} // namespace gmdl

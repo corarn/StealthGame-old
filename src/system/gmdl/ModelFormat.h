@@ -25,7 +25,7 @@
 #include <string_view>
 #include <vector>
 
-namespace gm31::model {
+namespace gmdl {
 
 //------------------------------------------------------------------------------
 // フォーマット定数
@@ -269,4 +269,4 @@ ComputeSkinningMatrices(const Model& model, const std::vector<Matrix4x4>& nodeWo
 /// コンバータの出口とローダーの入口の両方で呼んでおくと事故が減る。
 [[nodiscard]] bool Validate(const Model& model, std::vector<std::string>& problems);
 
-} // namespace gm31::model
+} // namespace gmdl

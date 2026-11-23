@@ -1,6 +1,6 @@
 ﻿#include "ModelFormat.h"
 
-namespace gm31::model {
+namespace gmdl {
 
 Matrix4x4 Multiply(const Matrix4x4& a, const Matrix4x4& b) noexcept
 {
@@ -153,4 +153,4 @@ bool Validate(const Model& model, std::vector<std::string>& problems)
     return problems.size() == problemsBefore;
 }
 
-} // namespace gm31::model
+} // namespace gmdl

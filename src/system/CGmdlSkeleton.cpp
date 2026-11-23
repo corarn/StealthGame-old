@@ -13,8 +13,6 @@
 
 namespace {
 
-	namespace gmdl = gm31::model;
-
 	// ---- 表示色 -------------------------------------------------------------
 	const Color COLOR_JOINT       (0.20f, 0.80f, 1.00f, 1.0f);	// 関節（水色）
 	const Color COLOR_JOINT_BONE  (1.00f, 0.55f, 0.10f, 1.0f);	// スキニングに使われる関節（橙）

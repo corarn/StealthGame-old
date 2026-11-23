@@ -74,7 +74,7 @@
 
 // ModelFormat.h をここで include しないのは、このヘッダを使う側に
 // gmdl の詳細まで引きずり込まないため（Build() の実装だけが知っていればよい）。
-namespace gm31::model { struct Model; }
+namespace gmdl { struct Model; }
 
 class CGmdlSkeleton {
 public:
@@ -103,7 +103,7 @@ public:
 	//--------------------------------------------------------------------------
 
 	/// モデルのノード階層から骨格を作る。ポーズはバインドポーズで初期化される。
-	void Build(const gm31::model::Model& model);
+	void Build(const gmdl::Model& model);
 
 	/// 中身を捨てる（モデルの読み込みに失敗したときなど）
 	void Clear();

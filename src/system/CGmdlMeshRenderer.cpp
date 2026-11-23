@@ -25,7 +25,7 @@ void CGmdlMeshRenderer::Init(CGmdlMesh& mesh)
 	// ---- PBR マテリアル（b8）を用意する -------------------------------------
 	// PBR 版 .gmdl（PBRM チャンク入り）ならその値をそのまま使い、
 	// 無ければ従来マテリアルから近似値を作る。どちらでも DrawPbr() で描ける。
-	const gm31::model::Model& model = mesh.GetModel();
+	const gmdl::Model& model = mesh.GetModel();
 	m_hasPbrData = !materials.empty()
 				&& model.pbrMaterials.size() == materials.size();
 
@@ -37,7 +37,7 @@ void CGmdlMeshRenderer::Init(CGmdlMesh& mesh)
 		CPbrMaterial::Params params{};
 		if (m_hasPbrData) {
 			// コンバータが PBRM チャンクへ書いた値（CPbrMaterial::Params と 1:1）
-			const gm31::model::PbrMaterial& src = model.pbrMaterials[i];
+			const gmdl::PbrMaterial& src = model.pbrMaterials[i];
 			params.albedo           = { src.albedo.x, src.albedo.y, src.albedo.z };
 			params.metallic         = src.metallic;
 			params.roughness        = src.roughness;

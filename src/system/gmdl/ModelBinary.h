@@ -32,7 +32,7 @@
 
 #include "ModelFormat.h"
 
-namespace gm31::model {
+namespace gmdl {
 
 /// 既定の拡張子
 inline constexpr const char* kFileExtension = ".gmdl";
@@ -59,4 +59,4 @@ inline constexpr const char* kFileExtension = ".gmdl";
 /// 人間が読める要約を返す（コンバータの確認用）。
 [[nodiscard]] std::string Describe(const Model& model);
 
-} // namespace gm31::model
+} // namespace gmdl

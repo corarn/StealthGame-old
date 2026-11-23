@@ -10,7 +10,6 @@
 namespace {
 
 	namespace fs = std::filesystem;
-	namespace gmdl = gm31::model;
 
 	/// UTF-8 の std::string から fs::path を作る。
 	/// std::string を直接 fs::path に渡すと Windows では ANSI 扱いになり、

@@ -5,7 +5,7 @@
 //  PBR マテリアル（b8 の定数バッファ）。
 //  レイアウトは shader/env_bindings.hlsl の PbrMaterialBuffer と 1:1 で対応する。
 //
-//  .gmdl（PBR 版）の PBRM チャンクに入っている値（gm31::model::PbrMaterial）を
+//  .gmdl（PBR 版）の PBRM チャンクに入っている値（gmdl::PbrMaterial）を
 //  そのまま Params に詰めて使う。PBR チャンクを持たない従来モデルでは、
 //  従来マテリアルから近似値を作って使う（CGmdlMeshRenderer::Init を参照）。
 //==============================================================================
