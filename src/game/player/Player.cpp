@@ -17,6 +17,7 @@ namespace
 
 	// player.glb に入っているアニメの名前（Mixamo から持ってきたときの名前）
 	constexpr const char* IDLE_CLIP_NAME = "Idle";
+	constexpr const char* WALK_CLIP_NAME = "Walk";
 
 	// 人が歩く速さくらい（1 秒に 1.4m）。足がすべって見えたら、Walk のアニメに合わせて変える
 	constexpr float MOVE_SPEED_PER_SEC = 1.4f;
@@ -79,6 +80,16 @@ void Player::Update(uint64_t deltaTimeMicrosec)
 	Vector2 moveInput     = ReadMoveInput();
 	Vector3 moveDirection = ConvertToCameraDirection(moveInput);
 	m_srt.pos += moveDirection * MOVE_SPEED_PER_SEC * deltaTimeSec;
+
+	// Play は今と同じアニメなら何もしないので、毎フレーム呼んでも最初に戻らない
+	if (moveDirection.LengthSquared() > 0.0f)
+	{
+		m_animationPlayer->Play(WALK_CLIP_NAME);
+	}
+	else
+	{
+		m_animationPlayer->Play(IDLE_CLIP_NAME);
+	}
 
 	m_animationPlayer->Update(deltaTimeSec);
 
