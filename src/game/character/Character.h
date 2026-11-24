@@ -29,6 +29,9 @@ private:
 	// 頭。どっちへ進むかを教えてもらう。体は親の型でしか知らないので、中身がプレイヤー用か敵用かを知らない
 	std::unique_ptr<CharacterController> m_controller = nullptr;
 
+	// 向きたい角度（Y 軸まわり）。止まってもここまで回り切るので、最後に進もうとした方を覚えておく
+	float m_targetYawRad = 0.0f;
+
 public:
 	explicit Character(SceneBase* scene);
 

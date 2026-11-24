@@ -1,4 +1,5 @@
 ﻿#include "Character.h"
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include "../../system/CShader.h"
@@ -23,6 +24,25 @@ namespace
 
 	// 人が歩く速さくらい（1 秒に 1.4m）。足がすべって見えたら、Walk のアニメに合わせて変える
 	constexpr float MOVE_SPEED_PER_SEC = 1.4f;
+
+	// 1 秒に回れる角度。180° を 0.25 秒で回る。Unreal の RotationRate の目安（500〜720°/秒）から仮に決めた。
+	// 敵の「反応の速さ」を変えるときは、この値を変える
+	constexpr float TURN_SPEED_RAD_PER_SEC = DirectX::XMConvertToRadians(720.0f);
+
+	// 角度を -π〜π（-180°〜180°）に直す。例：-340° → 20°、350° → -10°、180° → 180° のまま。
+	// 差をそのまま回すと、170° から -170° へ行くのに遠回りで -340° 回ってしまうので、近いほうの角度にする
+	float WrapAngleRad(float angleRad)
+	{
+		while (angleRad > DirectX::XM_PI)
+		{
+			angleRad -= DirectX::XM_2PI;
+		}
+		while (angleRad < -DirectX::XM_PI)
+		{
+			angleRad += DirectX::XM_2PI;
+		}
+		return angleRad;
+	}
 }
 
 Character::Character(SceneBase* scene)
@@ -94,13 +114,19 @@ void Character::Update(uint64_t deltaTimeMicrosec)
 
 		// モデルの前は +Z なので、+Z から進む向きまで何ラジアン回るかを atan2(x, z) で出す。
 		// 止まったときに入れると atan2(0, 0) = 0 で毎回 +Z を向いてしまうので、動いているときだけ変える
-		float yawRad = std::atan2(moveDirection.x, moveDirection.z);
-		m_srt.rot.y = yawRad;
+		m_targetYawRad = std::atan2(moveDirection.x, moveDirection.z);
 	}
 	else
 	{
 		m_animationPlayer->Play(IDLE_CLIP_NAME);
 	}
+
+	// 止まっていても、向きたい角度まで1秒に TURN_SPEED_RAD_PER_SEC ずつ回る（ちょんと押しても回り切る）。
+	// 残りが 1 フレームで回れる量より小さければ、ちょうどそこで止まる
+	float diffRad    = WrapAngleRad(m_targetYawRad - m_srt.rot.y);
+	float maxStepRad = TURN_SPEED_RAD_PER_SEC * deltaTimeSec;
+	float stepRad    = std::clamp(diffRad, -maxStepRad, maxStepRad);
+	m_srt.rot.y = WrapAngleRad(m_srt.rot.y + stepRad);
 
 	m_animationPlayer->Update(deltaTimeSec);
 
