@@ -1,4 +1,5 @@
 ﻿#include "Player.h"
+#include <cmath>
 #include <iostream>
 #include "../../system/CShader.h"
 #include "../../system/Inputmanager.h"
@@ -85,6 +86,11 @@ void Player::Update(uint64_t deltaTimeMicrosec)
 	if (moveDirection.LengthSquared() > 0.0f)
 	{
 		m_animationPlayer->Play(WALK_CLIP_NAME);
+
+		// モデルの前は +Z なので、+Z から進む向きまで何ラジアン回るかを atan2(x, z) で出す。
+		// 止まったときに入れると atan2(0, 0) = 0 で毎回 +Z を向いてしまうので、動いているときだけ変える
+		float yawRad = std::atan2(moveDirection.x, moveDirection.z);
+		m_srt.rot.y = yawRad;
 	}
 	else
 	{
