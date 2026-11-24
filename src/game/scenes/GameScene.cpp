@@ -2,7 +2,7 @@
 #include "../../system/LineDrawer.h"
 #include "../stage/Stage.h"
 #include "../character/Character.h"
-#include "../player/PlayerController.h"
+#include "../character/player/PlayerController.h"
 #include "../../system/renderer.h"
 #include <iostream>
 

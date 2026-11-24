@@ -1,6 +1,6 @@
 ﻿#include "PlayerController.h"
-#include "../../system/IScene.h"
-#include "../../system/Inputmanager.h"
+#include "../../../system/IScene.h"
+#include "../../../system/Inputmanager.h"
 
 PlayerController::PlayerController(SceneBase& scene)
 	: m_scene(&scene)
