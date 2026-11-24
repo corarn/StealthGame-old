@@ -149,8 +149,8 @@
     <ClInclude Include="src\game\scenes\GameScene.h" />
     <ClInclude Include="src\game\animation\AnimationPlayer.h" />
     <ClInclude Include="src\game\animation\BonePose.h" />
+    <ClInclude Include="src\game\character\Character.h" />
     <ClInclude Include="src\game\character\CharacterController.h" />
-    <ClInclude Include="src\game\player\Player.h" />
     <ClInclude Include="src\game\player\PlayerController.h" />
     <ClInclude Include="src\game\stage\Stage.h" />
     <ClInclude Include="src\main.h" />
@@ -227,7 +227,7 @@
     <ClCompile Include="src\game\debug\LightingDebugPanel.cpp" />
     <ClCompile Include="src\game\scenes\GameScene.cpp" />
     <ClCompile Include="src\game\animation\AnimationPlayer.cpp" />
-    <ClCompile Include="src\game\player\Player.cpp" />
+    <ClCompile Include="src\game\character\Character.cpp" />
     <ClCompile Include="src\game\player\PlayerController.cpp" />
     <ClCompile Include="src\game\stage\Stage.cpp" />
     <ClCompile Include="src\main.cpp" />

@@ -7,9 +7,11 @@
 #include "../../system/CGmdlSkeleton.h"
 #include "../../system/CGmdlBonePalette.h"
 #include "../animation/AnimationPlayer.h"
-#include "../character/CharacterController.h"
+#include "CharacterController.h"
 
-class Player : public GameObject
+// キャラクターの「体」。モデル・アニメ・骨を持ち、頭に聞いた向きへ動いて、その方を向く。
+// どっちへ進むかは自分で決めない。プレイヤーも敵もこのクラス1つで、付ける頭（CharacterController の子）だけを変える
+class Character : public GameObject
 {
 private:
 	std::unique_ptr<CGmdlMesh>         m_mesh     = nullptr;
@@ -24,14 +26,17 @@ private:
 	// 今流しているアニメ。Idle・Walk・Run を切り替える
 	std::unique_ptr<AnimationPlayer> m_animationPlayer = nullptr;
 
-	// 頭。どっちへ進むかを教えてもらう。中身は PlayerController だが、体は親の型でしか知らない
+	// 頭。どっちへ進むかを教えてもらう。体は親の型でしか知らないので、中身がプレイヤー用か敵用かを知らない
 	std::unique_ptr<CharacterController> m_controller = nullptr;
 
 public:
-	explicit Player(SceneBase* scene);
+	explicit Character(SceneBase* scene);
 
 	void Update(uint64_t deltaTimeMicrosec) override;
 	void Draw(uint64_t deltaTimeMicrosec) override;
 	void Init() override;
 	void Dispose() override;
+
+	// 頭を付ける。AddGameObject で作ったあと、シーンが呼ぶ。付けないと、ずっと立ったまま進まない
+	void SetController(std::unique_ptr<CharacterController> controller);
 };

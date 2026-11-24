@@ -7,7 +7,7 @@ class SceneBase;
 class PlayerController : public CharacterController
 {
 private:
-	// カメラを聞くためのシーン。シーンは Player より長く生きるので、ポインタで持っても消えた物を指さない
+	// カメラを聞くためのシーン。シーンは体（Character）より長く生きるので、ポインタで持っても消えた物を指さない
 	SceneBase* m_scene = nullptr;
 
 	// WASD の押し具合。x は右が +1・左が -1、y は前が +1・後ろが -1。何も押していなければ (0, 0)

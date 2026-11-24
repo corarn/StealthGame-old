@@ -1,13 +1,14 @@
-﻿#include "Player.h"
+﻿#include "Character.h"
 #include <cmath>
 #include <iostream>
 #include "../../system/CShader.h"
 #include "../../system/meshmanager.h"
 #include "../../system/renderer.h"
-#include "PlayerController.h"
 
 namespace
 {
+	// TODO: 敵を作るときに、モデルの場所を外から渡せるようにする。
+	// 土台の AddGameObject は作ったすぐ中で Init を呼ぶので、今はシーンが場所を伝える前にモデルを読んでしまう
 	constexpr const char* MODEL_PATH = "assets/model/player/playerPBR.gmdl";
 
 	// 骨の行列で頂点を動かす PBR のシェーダ。動かない Stage の "Pbr" とは別にする
@@ -24,16 +25,13 @@ namespace
 	constexpr float MOVE_SPEED_PER_SEC = 1.4f;
 }
 
-Player::Player(SceneBase* scene)
+Character::Character(SceneBase* scene)
 	: GameObject(scene)
 {
 }
 
-void Player::Init()
+void Character::Init()
 {
-	// TODO: 体を Character に作り変えたら、頭をどこで作るかを決め直す（敵の体には敵の頭を付けたいので）
-	m_controller = std::make_unique<PlayerController>(*m_ownerscene);
-
 	if (!ShaderManager::Contains(SHADER_KEY))
 	{
 		std::unique_ptr<CShader> shader = std::make_unique<CShader>();
@@ -44,7 +42,7 @@ void Player::Init()
 	std::unique_ptr<CGmdlMesh> mesh = std::make_unique<CGmdlMesh>();
 	if (!mesh->Load(MODEL_PATH))
 	{
-		std::cout << "Player: " << MODEL_PATH << " を読めなかった: " << mesh->GetLastError() << std::endl;
+		std::cout << "Character: " << MODEL_PATH << " を読めなかった: " << mesh->GetLastError() << std::endl;
 		return;
 	}
 
@@ -57,13 +55,13 @@ void Player::Init()
 	m_animationPlayer = std::make_unique<AnimationPlayer>(mesh->GetModel());
 	if (!m_animationPlayer->Play(IDLE_CLIP_NAME))
 	{
-		std::cout << "Player: アニメ " << IDLE_CLIP_NAME << " が見つからなかった" << std::endl;
+		std::cout << "Character: アニメ " << IDLE_CLIP_NAME << " が見つからなかった" << std::endl;
 	}
 
 	m_bonePalette = std::make_unique<CGmdlBonePalette>();
 	if (!m_bonePalette->Init(*m_skeleton))
 	{
-		std::cout << "Player: 骨の行列を GPU に送る準備ができなかった（骨の数 " << m_skeleton->GetBoneCount() << "）" << std::endl;
+		std::cout << "Character: 骨の行列を GPU に送る準備ができなかった（骨の数 " << m_skeleton->GetBoneCount() << "）" << std::endl;
 	}
 
 	// 送る入れ物は最初は全部 0 の行列。Update より先に Draw が来ると体が原点に潰れるので、先に一度詰めておく
@@ -72,7 +70,7 @@ void Player::Init()
 	m_mesh = std::move(mesh);
 }
 
-void Player::Update(uint64_t deltaTimeMicrosec)
+void Character::Update(uint64_t deltaTimeMicrosec)
 {
 	if (!m_bonePalette)
 	{
@@ -81,7 +79,12 @@ void Player::Update(uint64_t deltaTimeMicrosec)
 
 	float deltaTimeSec = static_cast<float>(deltaTimeMicrosec) / MICROSEC_PER_SEC;
 
-	Vector3 moveDirection = m_controller->DecideMoveDirection();
+	// 頭が付いていなければ進まない（付け忘れても落ちずに、立ったままになる）
+	Vector3 moveDirection = Vector3(0.0f, 0.0f, 0.0f);
+	if (m_controller != nullptr)
+	{
+		moveDirection = m_controller->DecideMoveDirection();
+	}
 	m_srt.pos += moveDirection * MOVE_SPEED_PER_SEC * deltaTimeSec;
 
 	// Play は今と同じアニメなら何もしないので、毎フレーム呼んでも最初に戻らない
@@ -106,7 +109,7 @@ void Player::Update(uint64_t deltaTimeMicrosec)
 	m_bonePalette->Update(*m_skeleton);
 }
 
-void Player::Draw(uint64_t deltaTimeMicrosec)
+void Character::Draw(uint64_t deltaTimeMicrosec)
 {
 	if (!m_renderer)
 	{
@@ -122,6 +125,11 @@ void Player::Draw(uint64_t deltaTimeMicrosec)
 	m_renderer->DrawPbr();
 }
 
-void Player::Dispose()
+void Character::Dispose()
 {
+}
+
+void Character::SetController(std::unique_ptr<CharacterController> controller)
+{
+	m_controller = std::move(controller);
 }

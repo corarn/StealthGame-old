@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "../../system/commontypes.h"
 
-// キャラクターの「頭」。体（今は Player）に、どっちへ進むかを教える。
+// キャラクターの「頭」。体（Character）に、どっちへ進むかを教える。
 // 体は頭の中身（キー入力か AI か）を知らない。プレイヤー用と敵用で、同じ呼び方で違う決め方をする。
 // 現場の Unreal の Controller と同じ考え方で、体と頭を分けた
 class CharacterController

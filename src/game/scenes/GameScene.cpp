@@ -1,7 +1,8 @@
 ﻿#include "GameScene.h"
 #include "../../system/LineDrawer.h"
 #include "../stage/Stage.h"
-#include "../player/Player.h"
+#include "../character/Character.h"
+#include "../player/PlayerController.h"
 #include "../../system/renderer.h"
 #include <iostream>
 
@@ -54,7 +55,9 @@ void GameScene::Init()
 
 	AddGameObject<Stage>(/* layer = */ 0);
 
-	Player* player = AddGameObject<Player>(/* layer = */ 0);
+	// プレイヤーは「体（Character）にプレイヤーの頭を付けたもの」。敵も同じ体に、敵の頭を付けて作る
+	Character* player = AddGameObject<Character>(/* layer = */ 0);
+	player->SetController(std::make_unique<PlayerController>(*this));
 	player->SetPosition(PLAYER_SPAWN_POSITION);
 
 	// Segment を描く前に1回呼ぶ（線用のシェーダーをここで読み込む）
