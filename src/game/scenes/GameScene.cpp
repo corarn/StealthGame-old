@@ -30,11 +30,10 @@ void GameScene::Init()
 {
 	// 親（SceneBase）の m_camera を使ってる。敵とかが GetCamera() でカメラを聞けるように
 	m_camera = std::make_unique<Camera>(CAMERA_POSITION, CAMERA_LOOKAT, CAMERA_UP);
-	m_freeCameraPanel = std::make_unique<FreeCameraDebugPanel>(m_camera.get());
+	m_freeCameraPanel = std::make_unique<FreeCameraDebugPanel>(*m_camera);
 	m_freeCameraPanel->RegisterToDebugUI();
 
-	m_environment = std::make_unique<CEnvironmentCube>();
-	if (!m_environment->Init())
+	if (!m_environment.Init())
 	{
 		std::cout << "GameScene: CEnvironmentCube の定数バッファを作れなかった" << std::endl;
 	}
@@ -48,9 +47,9 @@ void GameScene::Init()
 	light.Diffuse   = Color(LIGHT_COLOR.x * LIGHT_INTENSITY, LIGHT_COLOR.y * LIGHT_INTENSITY, LIGHT_COLOR.z * LIGHT_INTENSITY, 1.0f);
 	light.Ambient   = Color(AMBIENT, AMBIENT, AMBIENT, 1.0f);
 	Renderer::SetLight(light);
-	m_environment->EditSettings().exposure = EXPOSURE_EV;
+	m_environment.EditSettings().exposure = EXPOSURE_EV;
 
-	m_lightingPanel =std::make_unique<LightingDebugPanel>(m_environment.get());
+	m_lightingPanel = std::make_unique<LightingDebugPanel>(m_environment);
 	m_lightingPanel->RegisterToDebugUI();
 
 	AddGameObject<Stage>(/* layer = */ 0);
@@ -79,8 +78,8 @@ void GameScene::Draw(uint64_t deltaTimeMicrosec)
 	m_camera->Draw();
 
 	// PBR で描く物より先に送る。カメラはフリーカメラで動くので、動いたあとの位置を毎フレーム送る
-	m_environment->Update(*m_camera);
-	m_environment->Bind();
+	m_environment.Update(*m_camera);
+	m_environment.Bind();
 
 	DrawGameObjects(deltaTimeMicrosec);
 

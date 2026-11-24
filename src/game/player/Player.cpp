@@ -151,6 +151,12 @@ Vector3 Player::ConvertToCameraDirection(const Vector2& moveInput) const
 {
 	const Camera* camera = m_ownerscene->GetCamera();
 
+	// カメラはシーンが作る。作る前に呼ばれたら動かさない
+	if (camera == nullptr)
+	{
+		return Vector3(0.0f, 0.0f, 0.0f);
+	}
+
 	// 上下の成分を消して、地面に沿わせる（下を向いたカメラでも、地面にもぐらないように）
 	Vector3 cameraForward = camera->GetLookat() - camera->GetPosition();
 	cameraForward.y = 0.0f;

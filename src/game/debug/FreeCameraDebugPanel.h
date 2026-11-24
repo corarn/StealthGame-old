@@ -20,7 +20,7 @@ private:
 public:
 	// カメラの今の位置から、距離と角度を逆算しておく（欄を開いた瞬間にカメラが飛ばないように）
 	// camera は位置を決めてから渡す（決める前に渡すと、逆算がずれる）
-	explicit FreeCameraDebugPanel(Camera* camera);
+	explicit FreeCameraDebugPanel(Camera& camera);
 
 	// TODO: DebugUI は登録を消せない。この欄が消えたあとも呼ばれて落ちるので、シーンを切り替えるようになったら直す
 	void RegisterToDebugUI();

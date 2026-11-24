@@ -39,8 +39,8 @@ private:
 	std::unique_ptr<FreeCameraDebugPanel> m_freeCameraPanel = nullptr;
 
 	// PBR のシェーダに、カメラの位置と露出を送る係。露出は画面全体の明るさなので、物ではなくシーンが持つ
-	// コピーできないクラスなので、ほかのメンバと同じく unique_ptr で持って Init() で作る
-	std::unique_ptr<CEnvironmentCube> m_environment = nullptr;
+	// 作るだけなら GPU を触らない（定数バッファは Init() で作る）ので、unique_ptr にせず直接持つ
+	CEnvironmentCube m_environment = CEnvironmentCube();
 
 	// 画面に光と露出のデバッグ表示
 	std::unique_ptr<LightingDebugPanel> m_lightingPanel = nullptr;

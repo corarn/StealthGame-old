@@ -19,8 +19,8 @@ namespace
 	constexpr float LOOKAT_RANGE = 200.0f;  // マップは原点から約 160m 先まであるから、それより少し広く
 }
 
-FreeCameraDebugPanel::FreeCameraDebugPanel(Camera* camera)
-	: m_camera(camera)
+FreeCameraDebugPanel::FreeCameraDebugPanel(Camera& camera)
+	: m_camera(&camera)
 {
 	m_lookat = m_camera->GetLookat();
 

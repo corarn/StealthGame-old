@@ -16,8 +16,8 @@ namespace
 	constexpr float MIN_DIRECTION_LENGTH = 0.0001f;
 }
 
-LightingDebugPanel::LightingDebugPanel(CEnvironmentCube* environment)
-	: m_environment(environment)
+LightingDebugPanel::LightingDebugPanel(CEnvironmentCube& environment)
+	: m_environment(&environment)
 {
 	LIGHT light = Renderer::GetLight();
 	m_isLightEnabled = (light.Enable != FALSE);

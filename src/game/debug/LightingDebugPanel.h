@@ -22,7 +22,7 @@ private:
 
 public:
 	// Renderer の今の光から、色と強さを逆算しておく（欄を開いた瞬間に光が変わらないように）
-	explicit LightingDebugPanel(CEnvironmentCube* environment);
+	explicit LightingDebugPanel(CEnvironmentCube& environment);
 
 	// TODO: DebugUI は登録を消せない。シーンを切り替えるようになったら直す（FreeCameraDebugPanel と同じ）
 	void RegisterToDebugUI();
