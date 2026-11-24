@@ -2,9 +2,9 @@
 #include <cmath>
 #include <iostream>
 #include "../../system/CShader.h"
-#include "../../system/Inputmanager.h"
 #include "../../system/meshmanager.h"
 #include "../../system/renderer.h"
+#include "PlayerController.h"
 
 namespace
 {
@@ -31,6 +31,9 @@ Player::Player(SceneBase* scene)
 
 void Player::Init()
 {
+	// TODO: 体を Character に作り変えたら、頭をどこで作るかを決め直す（敵の体には敵の頭を付けたいので）
+	m_controller = std::make_unique<PlayerController>(*m_ownerscene);
+
 	if (!ShaderManager::Contains(SHADER_KEY))
 	{
 		std::unique_ptr<CShader> shader = std::make_unique<CShader>();
@@ -78,8 +81,7 @@ void Player::Update(uint64_t deltaTimeMicrosec)
 
 	float deltaTimeSec = static_cast<float>(deltaTimeMicrosec) / MICROSEC_PER_SEC;
 
-	Vector2 moveInput     = ReadMoveInput();
-	Vector3 moveDirection = ConvertToCameraDirection(moveInput);
+	Vector3 moveDirection = m_controller->DecideMoveDirection();
 	m_srt.pos += moveDirection * MOVE_SPEED_PER_SEC * deltaTimeSec;
 
 	// Play は今と同じアニメなら何もしないので、毎フレーム呼んでも最初に戻らない
@@ -122,55 +124,4 @@ void Player::Draw(uint64_t deltaTimeMicrosec)
 
 void Player::Dispose()
 {
-}
-
-Vector2 Player::ReadMoveInput() const
-{
-	const CInputManager& input = CInputManager::GetInstance();
-	Vector2 moveInput = Vector2(0.0f, 0.0f);
-	if (input.IsKeyPressed(DIK_W))
-	{
-		moveInput.y += 1.0f;
-	}
-	if (input.IsKeyPressed(DIK_S))
-	{
-		moveInput.y -= 1.0f;
-	}
-	if (input.IsKeyPressed(DIK_D))
-	{
-		moveInput.x += 1.0f;
-	}
-	if (input.IsKeyPressed(DIK_A))
-	{
-		moveInput.x -= 1.0f;
-	}
-	return moveInput;
-}
-
-Vector3 Player::ConvertToCameraDirection(const Vector2& moveInput) const
-{
-	const Camera* camera = m_ownerscene->GetCamera();
-
-	// カメラはシーンが作る。作る前に呼ばれたら動かさない
-	if (camera == nullptr)
-	{
-		return Vector3(0.0f, 0.0f, 0.0f);
-	}
-
-	// 上下の成分を消して、地面に沿わせる（下を向いたカメラでも、地面にもぐらないように）
-	Vector3 cameraForward = camera->GetLookat() - camera->GetPosition();
-	cameraForward.y = 0.0f;
-	cameraForward.Normalize();
-
-	// 上と前の外積が右になる（DirectX は左手座標）
-	Vector3 cameraRight = Vector3::Up.Cross(cameraForward);
-
-	Vector3 direction = cameraForward * moveInput.y + cameraRight * moveInput.x;
-
-	// 斜め（W と D）は長さが 1.41 になって速くなるので、1 に戻す。何も押していないときの 0 はそのまま
-	if (direction.LengthSquared() > 0.0f)
-	{
-		direction.Normalize();
-	}
-	return direction;
 }
