@@ -8,11 +8,6 @@
 
 namespace
 {
-	// 仮のカメラ位置。プレイヤーを正面（Z+ の側）の上から見る。後ろ（Z- の側）は壁で見えないため。追従カメラを作ったら消す
-	constexpr Vector3 CAMERA_POSITION = Vector3(-41.0f, 3.0f, -25.4f);
-	constexpr Vector3 CAMERA_LOOKAT   = Vector3(-41.0f, 1.0f, -31.0f);
-	constexpr Vector3 CAMERA_UP       = Vector3(  0.0f, 1.0f,   0.0f);
-
 	// 軸の線の長さ。カメラが遠いので長めにしてる
 	constexpr float AXIS_LENGTH = 20.0f;
 
@@ -30,9 +25,8 @@ namespace
 void GameScene::Init()
 {
 	// 親（SceneBase）の m_camera を使ってる。敵とかが GetCamera() でカメラを聞けるように
-	m_camera = std::make_unique<Camera>(CAMERA_POSITION, CAMERA_LOOKAT, CAMERA_UP);
-	m_freeCameraPanel = std::make_unique<FreeCameraDebugPanel>(*m_camera);
-	m_freeCameraPanel->RegisterToDebugUI();
+	// 位置は追従の係が入れるので、空で作る
+	m_camera = std::make_unique<Camera>();
 
 	if (!m_environment.Init())
 	{
@@ -56,9 +50,16 @@ void GameScene::Init()
 	AddGameObject<Stage>(/* layer = */ 0);
 
 	// プレイヤーは「体（Character）にプレイヤーの頭を付けたもの」。敵も同じ体に、敵の頭を付けて作る
-	Character* player = AddGameObject<Character>(/* layer = */ 0);
-	player->SetController(std::make_unique<PlayerController>(*this));
-	player->SetPosition(PLAYER_SPAWN_POSITION);
+	m_player = AddGameObject<Character>(/* layer = */ 0);
+	m_player->SetController(std::make_unique<PlayerController>(*this));
+	m_player->SetPosition(PLAYER_SPAWN_POSITION);
+
+	// フリーカメラの欄はカメラの位置から角度を逆算するので、欄を作る前に1回カメラを置いておく
+	// （位置と見る点が同じ 0 のままだと、欄の中で 0 で割ってしまう）
+	m_cameraFollower = std::make_unique<CameraFollower>(*m_camera);
+	m_cameraFollower->Update(m_player->GetPosition());
+	m_freeCameraPanel = std::make_unique<FreeCameraDebugPanel>(*m_camera);
+	m_freeCameraPanel->RegisterToDebugUI();
 
 	// Segment を描く前に1回呼ぶ（線用のシェーダーをここで読み込む）
 	LineDrawerInit();
@@ -72,6 +73,9 @@ void GameScene::Init()
 void GameScene::Update(uint64_t deltaTimeMicrosec)
 {
 	UpdateGameObjects(deltaTimeMicrosec);
+
+	// プレイヤーが動いたあとに呼ぶ。先に呼ぶと、カメラが1フレーム前の位置を見る
+	m_cameraFollower->Update(m_player->GetPosition());
 }
 
 void GameScene::Draw(uint64_t deltaTimeMicrosec)
@@ -80,7 +84,7 @@ void GameScene::Draw(uint64_t deltaTimeMicrosec)
 	// ビュー行列とプロジェクション行列を GPU に送る
 	m_camera->Draw();
 
-	// PBR で描く物より先に送る。カメラはフリーカメラで動くので、動いたあとの位置を毎フレーム送る
+	// PBR で描く物より先に送る。カメラは追従とフリーカメラで動くので、動いたあとの位置を毎フレーム送る
 	m_environment.Update(*m_camera);
 	m_environment.Bind();
 

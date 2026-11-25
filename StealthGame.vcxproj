@@ -152,6 +152,7 @@
     <ClInclude Include="src\game\character\Character.h" />
     <ClInclude Include="src\game\character\CharacterController.h" />
     <ClInclude Include="src\game\character\player\PlayerController.h" />
+    <ClInclude Include="src\game\camera\CameraFollower.h" />
     <ClInclude Include="src\game\stage\Stage.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\system\AimOrientation.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="src\game\animation\AnimationPlayer.cpp" />
     <ClCompile Include="src\game\character\Character.cpp" />
     <ClCompile Include="src\game\character\player\PlayerController.cpp" />
+    <ClCompile Include="src\game\camera\CameraFollower.cpp" />
     <ClCompile Include="src\game\stage\Stage.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\system\BoxDrawer.cpp" />

@@ -30,6 +30,10 @@ public:
 		m_srt.pos = pos;
 	}
 
+	Vector3 GetPosition() const {
+		return m_srt.pos;
+	}
+
 	void Destroy() { m_destroyed = true; }
 	bool isDestroyed() const { return m_destroyed; }
 
