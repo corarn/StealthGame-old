@@ -25,7 +25,6 @@ namespace
 void GameScene::Init()
 {
 	// 親（SceneBase）の m_camera を使ってる。敵とかが GetCamera() でカメラを聞けるように
-	// 位置は追従の係が入れるので、空で作る
 	m_camera = std::make_unique<Camera>();
 
 	if (!m_environment.Init())
@@ -54,10 +53,8 @@ void GameScene::Init()
 	m_player->SetController(std::make_unique<PlayerController>(*this));
 	m_player->SetPosition(PLAYER_SPAWN_POSITION);
 
-	// フリーカメラの欄はカメラの位置から角度を逆算するので、欄を作る前に1回カメラを置いておく
-	// （位置と見る点が同じ 0 のままだと、欄の中で 0 で割ってしまう）
 	m_cameraFollower = std::make_unique<CameraFollower>(*m_camera);
-	m_cameraFollower->Update(m_player->GetPosition());
+	m_cameraFollower->SnapTo(m_player->GetPosition());
 	m_freeCameraPanel = std::make_unique<FreeCameraDebugPanel>(*m_camera);
 	m_freeCameraPanel->RegisterToDebugUI();
 
@@ -74,8 +71,7 @@ void GameScene::Update(uint64_t deltaTimeMicrosec)
 {
 	UpdateGameObjects(deltaTimeMicrosec);
 
-	// プレイヤーが動いたあとに呼ぶ。先に呼ぶと、カメラが1フレーム前の位置を見る
-	m_cameraFollower->Update(m_player->GetPosition());
+	m_cameraFollower->Update(m_player->GetPosition(), deltaTimeMicrosec);
 }
 
 void GameScene::Draw(uint64_t deltaTimeMicrosec)

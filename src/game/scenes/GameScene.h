@@ -48,10 +48,8 @@ private:
 	// 画面に光と露出のデバッグ表示
 	std::unique_ptr<LightingDebugPanel> m_lightingPanel = nullptr;
 
-	// カメラをプレイヤーに追わせる係
 	std::unique_ptr<CameraFollower> m_cameraFollower = nullptr;
 
-	// 持ち主はシーンの物のリスト。カメラに毎フレーム位置を渡すために住所だけ覚える
 	Character* m_player = nullptr;
 
 public:
